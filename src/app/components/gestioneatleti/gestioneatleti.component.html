@@ -1,0 +1,235 @@
+<div class="container increased-font  mt-3">
+  <h1 class="centered-button">Lista Atleti</h1>
+  <div class="filter-container increased-font text-center mt-4">
+    <label for="roleFilter" class="mx-1">Filtra per ruolo:</label>
+    <select id="roleFilter" class="mx-1" [(ngModel)]="selectedRole">
+      <option value="">Tutti</option>
+      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+    </select>
+    <label for="teamFilter" class="mx-1">Filtra per squadra:</label>
+    <input type="text" id="teamFilter" class="mx-1" [(ngModel)]="selectedTeam">
+    <button class="btn btn-primary mx-4" (click)="applyFilters()">Applica</button>
+    <button class="btn btn-primary" (click)="openModalCreation()">Crea Nuovo Atleta</button>
+    <button class="btn btn-secondary mx-4" routerLink="/home-amministratore">Indietro</button>
+  </div>
+  <div class="table-container mt-4">
+    <table class="table" >
+      <tr>
+        <th>Username</th>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Squadra</th>
+        <th>Altezza (cm)</th>
+        <th>Peso (kg)</th>
+        <th>Ruolo</th>
+        <th>Email</th>
+        <th>Data di Nascita</th>
+      </tr>
+      <tr *ngFor="let atleta of filteredAtleti">
+        <td>{{ atleta.username }}</td>
+        <td>{{ atleta.nome }}</td>
+        <td>{{ atleta.cognome }}</td>
+        <td>{{atleta.squadra}}</td>
+        <td>{{ atleta.altezza }}</td>
+        <td>{{ atleta.peso }}</td>
+        <td>{{atleta.posizioneCampo}}</td>
+        <td>{{ atleta.email }}</td>
+        <td>{{ atleta.dataNascita | date }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="openModal(atleta)">Dettagli</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="modalAtleta" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Dettagli Atleta: {{atleta.nome}} {{atleta.cognome}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> {{atleta.id}}</p>
+          <p><strong>Nome:</strong> {{atleta.nome}}</p>
+          <p><strong>Cognome:</strong> {{atleta.cognome}}</p>
+          <div class="form-group" *ngIf="!atletaAllenato || isFormContentModified()">
+            <label for="ruoloupdate">Assegna Coach:</label>
+            <select type="text" class="form-control" id="ruoloupdate" name="squadra" [(ngModel)]="coachId" required>
+              <option value="">Nessuno</option>
+              <option *ngIf="newCoach.id!=null" [value]=newCoach.id [selected]="isSecondOptionDefault()">{{newCoach.nome}} {{newCoach.cognome}}</option>
+            </select>
+          </div>
+          <p *ngIf="atletaAllenato && !isFormContentModified()"><strong>Coach:</strong> {{coach.nome}} {{coach.cognome}}</p>
+          <p><strong>Username:</strong> {{atleta.username}}</p>
+          <p><strong>Email:</strong> {{atleta.email}}</p>
+          <p><strong>Data di Nascita:</strong> {{atleta.dataNascita | date}}</p>
+          <p><strong>Altezza:</strong> {{atleta.altezza}} cm</p>
+          <p><strong>Peso:</strong> {{atleta.peso}} kg</p>
+          <p><strong>Posizione: </strong> {{atleta.posizioneCampo}}</p>
+          <form #coachAtletaUpdate="ngForm">
+            <div class="form-group">
+              <label for="squadraupdate">Squadra:</label>
+              <input type="text" class="form-control" id="squadraupdate" name="squadraupdate" [(ngModel)]="squadra"
+                     required
+                     pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                     #inputSquadraUpdate = "ngModel"
+                     (ngModelChange)="getCoachBySquadraERuolo()"
+                     [ngClass]="{'is-invalid': inputSquadraUpdate.errors && inputSquadraUpdate.invalid && inputSquadraUpdate.touched && inputSquadraUpdate.value !== ''}">
+              <div class="invalid-feedback">
+                La squadra non può contenere solo numeri.
+              </div>
+              </div>
+              <button class="btn btn-primary my-3" [disabled]="!coachAtletaUpdate.valid || !isFormContentModified()" (click)="updateSquadraCoachAtleta()">Modifica Atleta</button>
+              <button class="btn btn-secondary my-3 mx-2" (click)="closeModal()">Indietro</button>
+          </form>
+            </div>
+          <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
+              <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Modifiche effettuate con successo.</div>
+              <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Errore durante la modifica dell'atleta."</div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalAtletaCreation" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Inserisci i dettagli per il nuovo Atleta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalCreation()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="creaAtletaClick()" #atletaForm="ngForm">
+            <div class="form-group">
+              <label for="nome">Nome:</label>
+              <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="newAtleta.nome"
+                     required
+                     pattern="^[A-Za-z]+$"
+                     #inputNome = "ngModel"
+                     [ngClass]="{'is-invalid': inputNome.errors && inputNome.invalid && inputNome.touched && inputNome.value !== ''}">
+            </div>
+            <div class="invalid-feedback">
+              Il nome deve contenere solo lettere.
+            </div>
+            <div class="form-group">
+              <label for="cognome">Cognome:</label>
+              <input type="text" class="form-control" id="cognome" name="cognome" [(ngModel)]="newAtleta.cognome"
+                     required
+                     pattern="^[A-Za-z]+$"
+                     #inputCognome = "ngModel"
+                     [ngClass]="{'is-invalid': inputCognome.errors && inputCognome.invalid && inputCognome.touched && inputCognome.value !== ''}">
+            </div>
+            <div class="invalid-feedback">
+              Il cognome deve contenere solo lettere.
+            </div>
+            <div class="form-group">
+              <label for="squadra">Squadra:</label>
+              <input type="text" class="form-control" id="squadra" name="squadra" [(ngModel)]="newAtleta.squadra"
+                     required
+                     pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                     #inputSquadra="ngModel"
+                     (ngModelChange)="getCoachBySquadraERuoloCreate()"
+                     [ngClass]="{'is-invalid': inputSquadra.errors && inputSquadra.invalid && inputSquadra.touched}">
+              <div class="invalid-feedback">
+                La squadra non può contenere solo numeri.
+              </div>
+              <div class="form-group">
+                <label for="ruolo">Posizione campo:</label>
+                <select type="text" class="form-control" id="ruolo" name="ruolo" [(ngModel)]="newAtleta.posizioneCampo" required
+                        (ngModelChange)="getCoachBySquadraERuoloCreate()">
+                  <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+                </select>
+              </div>
+            <div class="form-group">
+              <label for="coach">Assegna Coach:</label>
+              <select type="text" class="form-control" id="coach" name="coach" [(ngModel)]="coachId">
+                <option value="">Nessuno</option>
+                <option *ngIf="newCoach.id!=null" [value]=newCoach.id [selected]="isSecondOptionDefault()">{{newCoach.nome}} {{newCoach.cognome}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newAtleta.email"
+                     required
+                     pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                     #inputEmail = "ngModel"
+                     [ngClass]="{'is-invalid': inputEmail.errors && inputEmail.invalid && inputEmail.touched && inputEmail.value !== ''}">
+            </div>
+              <div class="invalid-feedback">
+                Indirizzo email non valido.
+              </div>
+            <div class="form-group">
+              <label for="dataNascita">Data di Nascita:</label>
+              <input type="date" class="form-control" id="dataNascita" name="dataNascita" [(ngModel)]="newAtleta.dataNascita" required>
+            </div>
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" class="form-control" id="username" name="username" [(ngModel)]="newAtleta.username"
+                     required
+                     pattern="^(?=.*[a-zA-Z])(?=.*[a-zA-Z0-9])[a-zA-Z0-9]+$"
+                     #inputUsername = "ngModel"
+                     [ngClass]="{'is-invalid': inputUsername.errors && inputUsername.invalid && inputUsername.touched && inputUsername.value !== ''}">
+              <div class="invalid-feedback">
+                L'username non può contenere solo numeri.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" class="form-control" name="password" [(ngModel)]="newAtleta.password" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmpassword">Conferma password:</label>
+              <input type="password" id="confirmpassword" class="form-control" name="confirmpassword" [(ngModel)]="confirmPassword"
+                     required [pattern]="newAtleta.password"
+                     #inputConfirmPassword="ngModel"
+                     [ngClass]="{'is-invalid': inputConfirmPassword.errors && inputConfirmPassword.invalid && inputConfirmPassword.touched}">
+              <div class="invalid-feedback">
+                Le password non coincidono.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="altezza">Altezza (cm):</label>
+              <input type="number" class="form-control" id="altezza" name="altezza" [(ngModel)]="newAtleta.altezza"
+                     required
+                     pattern="^[0-9]{1,3}$"
+                     min="150"
+                     #inputAltezza="ngModel"
+                     [ngClass]="{'is-invalid': inputAltezza.errors && inputAltezza.invalid && inputAltezza.touched}">
+              <div class="invalid-feedback">
+                Inserisci un numero valido per l'altezza (min 150cm, max 220 cm).
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="peso">Peso (kg):</label>
+              <input type="number" class="form-control" id="peso" name="peso" [(ngModel)]="newAtleta.peso"
+                     required
+                     pattern="^\d{1,3}(\.\d{1,2})?$"
+                     min="50"
+                     #inputPeso="ngModel"
+                     [ngClass]="{'is-invalid': inputPeso.errors && inputPeso.invalid && inputPeso.touched}">
+              <div class="invalid-feedback">
+                Inserisci un numero valido per il peso (min 50kg, max 150 kg).
+              </div>
+            </div>
+            </div>
+            <button class="btn btn-primary my-3" [disabled]="!atletaForm.valid">Crea Atleta</button>
+            <button class="btn btn-secondary my-3 mx-2" (click)="closeModalCreation()">Annulla</button>
+          </form>
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Registrazione avvenuta con successo.</div>
+            <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Username o email già esistenti.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

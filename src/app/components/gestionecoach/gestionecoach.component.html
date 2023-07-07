@@ -1,0 +1,192 @@
+<div class="container increased-font  mt-3">
+<h1 class="centered-button">Lista Coach</h1>
+  <div class="filter-container increased-font text-center mt-4">
+    <label for="roleFilter" class="mx-1">Filtra per ruolo:</label>
+    <select id="roleFilter" class="mx-1" [(ngModel)]="selectedRole">
+      <option value="">Tutti</option>
+      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+    </select>
+    <label for="teamFilter" class="mx-1">Filtra per squadra:</label>
+    <input type="text" id="teamFilter" class="mx-1" [(ngModel)]="selectedTeam">
+    <button class="btn btn-primary mx-4" (click)="applyFilters()">Applica</button>
+    <button class="btn btn-primary" (click)="openModalCreation()">Crea Nuovo Coach</button>
+    <button class="btn btn-secondary mx-4" routerLink="/home-amministratore">Indietro</button>
+  </div>
+<div class="table-container mt-4">
+  <table class="table" >
+    <tr>
+      <th>Username</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Squadra</th>
+      <th>Ruolo</th>
+      <th>Email</th>
+      <th>Data di Nascita</th>
+    </tr>
+    <tr *ngFor="let coach of filteredCoaches">
+      <td>{{ coach.username }}</td>
+      <td>{{ coach.nome }}</td>
+      <td>{{ coach.cognome }}</td>
+      <td>{{coach.squadra}}</td>
+      <td>{{coach.ruoloAllenato}}</td>
+      <td>{{ coach.email }}</td>
+      <td>{{ coach.dataNascita | date }}</td>
+      <td>
+        <button class="btn btn-primary" (click)="openModal(coach)">Dettagli</button>
+      </td>
+    </tr>
+  </table>
+</div>
+  <div id="modalCoach" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Dettagli Coach: {{coach.nome}} {{coach.cognome}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> {{coach.id}}</p>
+          <p><strong>Nome:</strong> {{coach.nome}}</p>
+          <p><strong>Cognome:</strong> {{coach.cognome}}</p>
+          <p><strong>Username:</strong> {{coach.username}}</p>
+          <p><strong>Email:</strong> {{coach.email}}</p>
+          <p><strong>Data di Nascita:</strong> {{coach.dataNascita | date}}</p>
+          <form #coachFormUpdate="ngForm">
+          <div class="form-group">
+            <label for="squadraupdate">Squadra:</label>
+            <input type="text" class="form-control" id="squadraupdate" name="squadraupdate" [(ngModel)]="squadra" [disabled]="coachAllena"
+                   required
+                   pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                   #inputSquadraUpdate = "ngModel"
+                   [ngClass]="{'is-invalid': inputSquadraUpdate.errors && inputSquadraUpdate.invalid && inputSquadraUpdate.touched && inputSquadraUpdate.value !== ''}">
+            <div class="invalid-feedback">
+              La squadra non può contenere solo numeri.
+            </div>
+            <div class="form-group">
+              <label for="ruoloupdate">Ruolo allenato:</label>
+              <select type="text" class="form-control" id="ruoloupdate" name="squadra" [(ngModel)]="ruoloAllenato" [disabled]="coachAllena" required>
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              </select>
+            </div>
+            <button class="btn btn-primary my-3" (click)="updateRuoloSquadraCoach()" [disabled]="!coachFormUpdate.valid || !isFormContentModified()" *ngIf="!coachAllena">Modifica Coach</button>
+          <button class="btn btn-secondary my-3 mx-2" (click)="closeModal()">Indietro</button>
+        </div></form>
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Modifiche avvenute con successo.</div>
+            <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Coach già esistente nella squadra "{{squadra}}" per il ruolo "{{ruoloAllenato}}."</div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalCoachCreation" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Inserire i dettagli per il Coach</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalCreation()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="creaCoachClick(newCoach)" #coachForm="ngForm">
+            <div class="form-group">
+              <label for="nome">Nome:</label>
+              <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="newCoach.nome"
+                     required
+                     pattern="^[A-Za-z]+$"
+                     #inputNome = "ngModel"
+                     [ngClass]="{'is-invalid': inputNome.errors && inputNome.invalid && inputNome.touched && inputNome.value !== ''}">
+              <div class="invalid-feedback">
+                Il nome deve contenere solo lettere.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cognome">Cognome:</label>
+              <input type="text" class="form-control" id="cognome" name="cognome" [(ngModel)]="newCoach.cognome"
+                     required
+                     pattern="^[A-Za-z]+$"
+                     #inputCognome = "ngModel"
+                     [ngClass]="{'is-invalid': inputCognome.errors && inputCognome.invalid && inputCognome.touched && inputCognome.value !== ''}">
+              <div class="invalid-feedback">
+                Il cognome deve contenere solo lettere.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newCoach.email"
+                     required
+                     pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                     #inputEmail = "ngModel"
+                     [ngClass]="{'is-invalid': inputEmail.errors && inputEmail.invalid && inputEmail.touched && inputEmail.value !== ''}">
+              <div class="invalid-feedback">
+                Indirizzo email non valido.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="dataNascita">Data di Nascita:</label>
+              <input type="date" class="form-control" id="dataNascita" name="dataNascita" [(ngModel)]="newCoach.dataNascita" required>
+            </div>
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" class="form-control" id="username" name="username" [(ngModel)]="newCoach.username"
+                     required
+                     pattern="^(?=.*[a-zA-Z])(?=.*[a-zA-Z0-9])[a-zA-Z0-9]+$"
+                     #inputUsername = "ngModel"
+                     [ngClass]="{'is-invalid': inputUsername.errors && inputUsername.invalid && inputUsername.touched && inputUsername.value !== ''}">
+              <div class="invalid-feedback">
+                L'username non può contenere solo numeri.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" class="form-control" name="password" [(ngModel)]="newCoach.password" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmpassword">Conferma password:</label>
+              <input type="password" id="confirmpassword" class="form-control" name="confirmpassword" [(ngModel)]="confirmPassword"
+                     required [pattern]="newCoach.password"
+                     #inputConfirmPassword="ngModel"
+                     [ngClass]="{'is-invalid': inputConfirmPassword.errors && inputConfirmPassword.invalid && inputConfirmPassword.touched}">
+              <div class="invalid-feedback">
+                Le password non coincidono.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="squadra">Squadra:</label>
+              <input type="text" class="form-control" id="squadra" name="squadra" [(ngModel)]="newCoach.squadra"
+                     required
+                     pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                     #inputSquadra = "ngModel"
+                     [ngClass]="{'is-invalid': inputSquadra.errors && inputSquadra.invalid && inputSquadra.touched && inputSquadra.value !== ''}">
+              <div class="invalid-feedback">
+                La squadra non può contenere solo numeri.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="squadra">Ruolo allenato:</label>
+              <select type="text" class="form-control" id="ruolo" name="squadra" [(ngModel)]="newCoach.ruoloAllenato" required>
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3" [disabled]="!coachForm.valid">Crea Coach</button>
+            <button class="btn btn-secondary mx-3 mt-3" (click)="closeModalCreation()">Indietro</button>
+          </form>
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Registrazione avvenuta con successo.</div>
+            <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Username o email già esistenti.</div>
+          </div>
+          <div *ngIf="coachEsistente" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Coach già esistente nella squadra "{{newCoach.squadra}}" per il ruolo "{{newCoach.ruoloAllenato}}".
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+</div>

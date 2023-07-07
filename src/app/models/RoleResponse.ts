@@ -1,0 +1,3 @@
+interface RoleResponse {
+  role: string;
+}
