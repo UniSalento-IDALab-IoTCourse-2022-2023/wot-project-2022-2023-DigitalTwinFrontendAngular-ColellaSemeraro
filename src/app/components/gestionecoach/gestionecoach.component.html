@@ -84,7 +84,7 @@
     </div>
   </div>
   <div id="modalCoachCreation" class="modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog d-flex">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Inserire i dettagli per il Coach</h5>
@@ -94,6 +94,8 @@
         </div>
         <div class="modal-body">
           <form (ngSubmit)="creaCoachClick(newCoach)" #coachForm="ngForm">
+            <div class="row">
+              <div class="col-md-6">
             <div class="form-group">
               <label for="nome">Nome:</label>
               <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="newCoach.nome"
@@ -142,6 +144,8 @@
                 L'username non può contenere solo numeri.
               </div>
             </div>
+              </div>
+              <div class="col-md-6">
             <div class="form-group">
               <label for="password">Password:</label>
               <input type="password" id="password" class="form-control" name="password" [(ngModel)]="newCoach.password" required>
@@ -173,8 +177,12 @@
                 <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary mt-3" [disabled]="!coachForm.valid">Crea Coach</button>
-            <button class="btn btn-secondary mx-3 mt-3" (click)="closeModalCreation()">Indietro</button>
+              </div>
+              <div class="centered-button">
+                <button type="submit" class="btn btn-primary mt-3" [disabled]="!coachForm.valid">Crea Coach</button>
+                <button class="btn btn-secondary mx-3 mt-3" (click)="closeModalCreation()">Indietro</button>
+              </div>
+            </div>
           </form>
           <div class="d-flex justify-content-center">
             <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;

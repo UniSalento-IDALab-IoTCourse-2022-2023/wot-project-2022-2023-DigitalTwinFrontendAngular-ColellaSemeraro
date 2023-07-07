@@ -156,6 +156,42 @@ export class UsersService {
     );
   }
 
+  updateEmailUser(jwt: string, username: string, email: string): Observable<any> {
+
+    const url = "http://localhost:8080/api/users/update/email";
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    const userDTO = {
+      username: username,
+      email: email
+    }
+
+    return this.http.patch(url, userDTO, {
+      ...this.httpOptions,
+      responseType: 'text' // Specifica il tipo di risposta come testo
+    });
+
+  }
+
+  updatePasswordUser(jwt: string, username: string, old_password: string, new_password: string): Observable<any> {
+
+    const url = "http://localhost:8080/api/users/update/password/"+username;
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    const requestPasswordChange = {
+      old_password: old_password,
+      new_password: new_password
+    }
+
+    return this.http.patch(url, requestPasswordChange, {
+      ...this.httpOptions,
+      responseType: 'text' // Specifica il tipo di risposta come testo
+    });
+
+  }
+
   logout() {
     localStorage.clear();
 

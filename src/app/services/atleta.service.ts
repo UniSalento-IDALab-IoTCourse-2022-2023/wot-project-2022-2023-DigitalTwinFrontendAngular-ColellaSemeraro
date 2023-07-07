@@ -30,6 +30,16 @@ export class AtletaService {
 
   }
 
+  getAtletaById(jwt: string, idAtleta: string | undefined): Observable<Atleta> {
+
+    const url = "http://localhost:8080/api/users/atleta/findById/"+idAtleta;
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    return this.http.get<Atleta>(url, this.httpOptions)
+
+  }
+
   checkifAtletaAllenatoDaCoach(jwt: string, idCoach: string | undefined): Observable<boolean> {
 
     const url = "http://localhost:8080/api/users/atleta/existsByCoachId/"+idCoach;
@@ -65,7 +75,38 @@ export class AtletaService {
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
-    return this.http.post<Atleta>(url, atletaDTO, this.httpOptions)
+    return this.http.post<Atleta>(url, atletaDTO, this.httpOptions);
+
+  }
+
+  getAtletyByCoach(jwt: string, idCoach: string | undefined): Observable<Atleta[]> {
+
+    const url = "http://localhost:8080/api/users/atleta/findByCoachId/"+idCoach;
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    return this.http.get<Atleta[]>(url, this.httpOptions);
+
+  }
+
+  updatePesoAltezza(jwt: string, idCoach: string | undefined, usernameAtleta: string, idCoachAtleta: string, altezza: number, peso: number): Observable<any> {
+
+    const url = "http://localhost:8080/api/users/atleta/updateAltezzaEPeso/"+idCoach;
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    const atletaDTO = {
+      idCoach: idCoachAtleta,
+      username: usernameAtleta,
+      altezza: altezza,
+      peso: peso
+    }
+
+    return this.http.patch(url, atletaDTO, {
+        ...this.httpOptions,
+        responseType: 'text' // Specifica il tipo di risposta come testo
+      }
+    );
 
   }
 

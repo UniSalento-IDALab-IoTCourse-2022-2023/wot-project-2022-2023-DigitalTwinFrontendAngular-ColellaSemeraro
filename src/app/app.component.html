@@ -10,14 +10,35 @@
         <li class="nav-item" *ngIf="enableHome">
           <a class="nav-link" [href]="linkHrefHome">Home</a>
         </li>
-          <li class="nav-item" *ngIf="ifAmministratore">
-            <a class="nav-link" href="/gestione-atleti" style="white-space: nowrap;">Gestione Atleti</a>
-          </li>
-          <li class="nav-item" *ngIf="ifAmministratore">
-            <a class="nav-link" href="/gestione-coach" style="white-space: nowrap;">Gestione Coach</a>
-          </li>
+        <li class="nav-item" *ngIf="ifAmministratore">
+          <a class="nav-link" href="/gestione-atleti" style="white-space: nowrap;">Gestione Atleti</a>
+        </li>
+        <li class="nav-item" *ngIf="ifAmministratore">
+          <a class="nav-link" href="/gestione-coach" style="white-space: nowrap;">Gestione Coach</a>
+        </li>
+        <li class="nav-item" *ngIf="ifCoach">
+          <a class="nav-link" href="/gestione-atleti-coach" style="white-space: nowrap">Gestione Atleti</a>
+        </li>
+        <li class="nav-item" *ngIf="ifCoach">
+          <a class="nav-link" href="/gestione-allenamenti" style="white-space: nowrap">Allenamenti</a>
+        </li>
+        <li class="nav-item" *ngIf="ifCoach">
+          <a class="nav-link" href="/gestione-profilo-coach" style="white-space: nowrap">Gestione Profilo</a>
+        </li>
+        <li class="nav-item" *ngIf="ifAtleta">
+          <a class="nav-link" href="/gestione-allenamenti-atleta" style="white-space: nowrap">Allenamenti</a>
+        </li>
+        <li class="nav-item" *ngIf="ifAtleta">
+          <a class="nav-link" href="/gestione-profilo-atleta" style="white-space: nowrap">Gestione Profilo</a>
+        </li>
       </ul>
-      <div class="navbar-logout" *ngIf="enableHome">
+      <div class="navbar-logout-1" *ngIf="enableHome && ifAmministratore">
+        <button class="btn btn-primary" (click)="logout()">Logout</button>
+      </div>
+      <div class="navbar-logout-2" *ngIf="enableHome && ifCoach">
+        <button class="btn btn-primary" (click)="logout()">Logout</button>
+      </div>
+      <div class="navbar-logout-3" *ngIf="enableHome && ifAtleta">
         <button class="btn btn-primary" (click)="logout()">Logout</button>
       </div>
     </div>

@@ -12,6 +12,11 @@ import { HomeCoachComponent } from './components/home-coach/home-coach.component
 import { HomeAtletaComponent } from './components/home-atleta/home-atleta.component';
 import { GestionecoachComponent } from './components/gestionecoach/gestionecoach.component';
 import { GestioneatletiComponent } from './components/gestioneatleti/gestioneatleti.component';
+import { GestioneatleticoachComponent } from './components/gestioneatleticoach/gestioneatleticoach.component';
+import { GestioneprofilocoachComponent } from './components/gestioneprofilocoach/gestioneprofilocoach.component';
+import { GestioneallenamentiComponent } from './components/gestioneallenamenti/gestioneallenamenti.component';
+import { GestioneallenamentiatletaComponent } from './components/gestioneallenamentiatleta/gestioneallenamentiatleta.component';
+import { GestioneprofiloatletaComponent } from './components/gestioneprofiloatleta/gestioneprofiloatleta.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +26,12 @@ import { GestioneatletiComponent } from './components/gestioneatleti/gestioneatl
     HomeCoachComponent,
     HomeAtletaComponent,
     GestionecoachComponent,
-    GestioneatletiComponent
+    GestioneatletiComponent,
+    GestioneatleticoachComponent,
+    GestioneprofilocoachComponent,
+    GestioneallenamentiComponent,
+    GestioneallenamentiatletaComponent,
+    GestioneprofiloatletaComponent
   ],
   imports: [
     BrowserModule,

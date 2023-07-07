@@ -97,7 +97,7 @@
     </div>
   </div>
   <div id="modalAtletaCreation" class="modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog d-flex">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Inserisci i dettagli per il nuovo Atleta</h5>
@@ -107,6 +107,8 @@
         </div>
         <div class="modal-body">
           <form (ngSubmit)="creaAtletaClick()" #atletaForm="ngForm">
+            <div class="row">
+              <div class="col-md-6">
             <div class="form-group">
               <label for="nome">Nome:</label>
               <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="newAtleta.nome"
@@ -114,9 +116,9 @@
                      pattern="^[A-Za-z]+$"
                      #inputNome = "ngModel"
                      [ngClass]="{'is-invalid': inputNome.errors && inputNome.invalid && inputNome.touched && inputNome.value !== ''}">
-            </div>
-            <div class="invalid-feedback">
-              Il nome deve contenere solo lettere.
+              <div class="invalid-feedback">
+                Il nome deve contenere solo lettere.
+              </div>
             </div>
             <div class="form-group">
               <label for="cognome">Cognome:</label>
@@ -125,9 +127,9 @@
                      pattern="^[A-Za-z]+$"
                      #inputCognome = "ngModel"
                      [ngClass]="{'is-invalid': inputCognome.errors && inputCognome.invalid && inputCognome.touched && inputCognome.value !== ''}">
-            </div>
-            <div class="invalid-feedback">
-              Il cognome deve contenere solo lettere.
+              <div class="invalid-feedback">
+                Il cognome deve contenere solo lettere.
+              </div>
             </div>
             <div class="form-group">
               <label for="squadra">Squadra:</label>
@@ -140,6 +142,7 @@
               <div class="invalid-feedback">
                 La squadra non può contenere solo numeri.
               </div>
+            </div>
               <div class="form-group">
                 <label for="ruolo">Posizione campo:</label>
                 <select type="text" class="form-control" id="ruolo" name="ruolo" [(ngModel)]="newAtleta.posizioneCampo" required
@@ -161,10 +164,12 @@
                      pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
                      #inputEmail = "ngModel"
                      [ngClass]="{'is-invalid': inputEmail.errors && inputEmail.invalid && inputEmail.touched && inputEmail.value !== ''}">
-            </div>
               <div class="invalid-feedback">
                 Indirizzo email non valido.
               </div>
+            </div>
+          </div>
+              <div class="col-md-6">
             <div class="form-group">
               <label for="dataNascita">Data di Nascita:</label>
               <input type="date" class="form-control" id="dataNascita" name="dataNascita" [(ngModel)]="newAtleta.dataNascita" required>
@@ -218,9 +223,12 @@
                 Inserisci un numero valido per il peso (min 50kg, max 150 kg).
               </div>
             </div>
+              </div>
+            <div class="centered-button">
+              <button class="btn btn-primary my-3" [disabled]="!atletaForm.valid">Crea Atleta</button>
+              <button class="btn btn-secondary my-3 mx-2" (click)="closeModalCreation()">Annulla</button>
             </div>
-            <button class="btn btn-primary my-3" [disabled]="!atletaForm.valid">Crea Atleta</button>
-            <button class="btn btn-secondary my-3 mx-2" (click)="closeModalCreation()">Annulla</button>
+            </div>
           </form>
           <div class="d-flex justify-content-center">
             <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;

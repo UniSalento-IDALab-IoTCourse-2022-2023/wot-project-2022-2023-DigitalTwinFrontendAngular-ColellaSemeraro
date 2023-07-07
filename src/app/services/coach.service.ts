@@ -30,7 +30,7 @@ export class CoachService {
 
   }
 
-  getCoachById(jwt: string, idCoach: string): Observable<Coach> {
+  getCoachById(jwt: string, idCoach: string | undefined): Observable<Coach> {
 
     const url = "http://localhost:8080/api/users/coach/findById/"+idCoach;
 
