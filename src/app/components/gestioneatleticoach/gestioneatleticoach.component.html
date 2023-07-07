@@ -1,0 +1,92 @@
+<div class="container increased-font  mt-3">
+  <h1 class="centered-button">Lista Atleti</h1>
+  <button class="btn btn-secondary" routerLink="/home-coach">Indietro</button>
+  <div class="table-container mt-4">
+    <table class="table" >
+      <tr>
+        <th>Username</th>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Squadra</th>
+        <th>Altezza (cm)</th>
+        <th>Peso (kg)</th>
+        <th>Ruolo</th>
+        <th>Email</th>
+        <th>Data di Nascita</th>
+      </tr>
+      <tr *ngFor="let atleta of atleti">
+        <td>{{ atleta.username }}</td>
+        <td>{{ atleta.nome }}</td>
+        <td>{{ atleta.cognome }}</td>
+        <td>{{atleta.squadra}}</td>
+        <td>{{ atleta.altezza }}</td>
+        <td>{{ atleta.peso }}</td>
+        <td>{{atleta.posizioneCampo}}</td>
+        <td>{{ atleta.email }}</td>
+        <td>{{ atleta.dataNascita | date }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="openModal(atleta)">Dettagli</button>
+          <button class="btn btn-primary mx-2">Allenamenti</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="modalAtleta" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Dettagli Atleta: {{atleta.nome}} {{atleta.cognome}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> {{atleta.id}}</p>
+          <p><strong>Nome:</strong> {{atleta.nome}}</p>
+          <p><strong>Cognome:</strong> {{atleta.cognome}}</p>
+          <p><strong>Coach:</strong> {{coach.nome}} {{coach.cognome}}</p>
+          <p><strong>Username:</strong> {{atleta.username}}</p>
+          <p><strong>Email:</strong> {{atleta.email}}</p>
+          <p><strong>Data di Nascita:</strong> {{atleta.dataNascita | date}}</p>
+          <p><strong>Squadra:</strong> {{atleta.squadra}}</p>
+          <p><strong>Posizione: </strong> {{atleta.posizioneCampo}}</p>
+          <form #coachAtletaUpdate="ngForm">
+            <div class="form-group">
+              <label for="altezzaupdate">Altezza:</label>
+              <input type="number" class="form-control" id="altezzaupdate" name="altezzaupdate" [(ngModel)]="atleta.altezza"
+                     required
+                     pattern="^[0-9]{1,3}$"
+                     #inputAltezzaUpdate = "ngModel"
+                     [ngClass]="{'is-invalid': inputAltezzaUpdate.errors && inputAltezzaUpdate.invalid && inputAltezzaUpdate.touched && inputAltezzaUpdate.value !== ''}">
+              <div class="invalid-feedback">
+                Inserisci un numero valido per l'altezza (min 150cm, max 220 cm).
+              </div>
+            </div>
+              <div class="form-group">
+                <label for="pesoupdate">Peso (kg):</label>
+                <input type="number" class="form-control" id="pesoupdate" name="pesoupdate" [(ngModel)]="atleta.peso"
+                       required
+                       pattern="^\d{1,3}(\.\d{1,2})?$"
+                       min="50"
+                       #inputUpdatePeso="ngModel"
+                       [ngClass]="{'is-invalid': inputUpdatePeso.errors && inputUpdatePeso.invalid && inputUpdatePeso.touched}">
+                <div class="invalid-feedback">
+                  Inserisci un numero valido per il peso (min 50kg, max 150 kg).
+                </div>
+            </div>
+            <button class="btn btn-primary my-3" [disabled]="!coachAtletaUpdate.valid || !isFormContentModified()" (click)="updateAtleta()">Modifica Atleta</button>
+            <button class="btn btn-secondary my-3 mx-2" (click)="closeModal()">Indietro</button>
+          </form>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Modifiche effettuate con successo.</div>
+            <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Errore durante la modifica dell'atleta."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

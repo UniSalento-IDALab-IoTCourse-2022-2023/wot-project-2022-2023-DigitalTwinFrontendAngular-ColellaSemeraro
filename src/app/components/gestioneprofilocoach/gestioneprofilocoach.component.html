@@ -1,0 +1,99 @@
+<div class="container mt-4">
+  <h3>Dettagli Coach</h3>
+  <h6>Qui puoi visualizzare i tuoi dettagli e modificare email, indirizzo di residenza e telefono.</h6>
+  <form #registrationForm="ngForm">
+    <div class="form-group">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" class="form-control" value="{{ coach.nome }}" disabled>
+    </div>
+    <div class="form-group">
+      <label for="cognome">Cognome:</label>
+      <input type="text" id="cognome" name="cognome" class="form-control" value="{{ coach.cognome }}" disabled>
+    </div>
+    <div class="form-group">
+      <label for="cognome">Username:</label>
+      <input type="text" id="username" name="username" class="form-control" value="{{ coach.username }}" disabled>
+    </div>
+    <div class="form-group">
+      <label for="dataNascita">Data di Nascita:</label>
+      <input type="text" id="dataNascita" name="dataNascita" class="form-control" value="{{ coach.dataNascita | date: 'dd/MM/yyyy' }}" disabled>
+    </div>
+    <div class="form-group">
+      <label for="dataNascita">Squadra:</label>
+      <input type="text" id="squadra" name="squadra" class="form-control" value="{{ coach.squadra }}" disabled>
+    </div>
+    <div class="form-group">
+      <label for="dataNascita">Ruolo Allenato:</label>
+      <input type="text" id="ruoloAllenato" name="ruoloAllenato" class="form-control" value="{{ coach.ruoloAllenato }}" disabled>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" class="form-control" [(ngModel)]="coach.email"
+             required
+             pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+             #inputEmail="ngModel"
+             [ngClass]="{'is-invalid': inputEmail.errors && inputEmail.invalid && inputEmail.touched && inputEmail.value !== ''}">
+      <div class="invalid-feedback">
+        Indirizzo email non valido.
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3" [disabled]=" !registrationForm.valid || !isFormContentModified()" (click)="updateCoach()">Salva</button>
+    <button class="btn btn-secondary mt-3 mx-3" routerLink="/home-coach">Indietro</button>
+    <button class="btn btn-secondary mt-3 mx-3" (click)="openChangePasswordModal()">Modifica Password</button>
+
+    <div class="d-flex justify-content-center">
+      <div *ngIf="successMod" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Modifiche avvenute con successo</div>
+      <div *ngIf="emailEsistente" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Email già esistente</div>
+    </div>
+  </form>
+  <!-- Modale per la modifica della password -->
+  <div id="changePasswordModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifica Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeChangePasswordModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #changePasswordForm="ngForm">
+            <div class="form-group">
+              <label for="currentPassword">Password</label>
+              <input type="password" id="currentPassword" class="form-control" [(ngModel)]="currentPassword" name="currentPassword"
+                     required>
+            </div>
+            <div class="form-group">
+              <label for="newPassword">Nuova Password:</label>
+              <input type="password" id="newPassword" name="newPassword" class="form-control" [(ngModel)]="newPassword" required
+                     #inputNewPassword="ngModel"
+                     [ngClass]="{'is-invalid': isPasswordInvalid() && inputNewPassword.touched}">
+              <div class="invalid-feedback">
+                La nuova password deve essere diversa dalla password corrente.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Conferma Nuova Password:</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" [(ngModel)]="confirmPassword" required
+                     [pattern]="newPassword"
+                     #inputConfirmPassword="ngModel"
+                     [ngClass]="{'is-invalid': inputConfirmPassword.errors && inputConfirmPassword.invalid && inputConfirmPassword.touched}">
+              <div class="invalid-feedback">
+                Le password non coincidono.
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2" [disabled]="!changePasswordForm.valid || newPassword !== confirmPassword" (click)="updatePassword()">Salva</button>
+            <div class="d-flex justify-content-center">
+              <div *ngIf="changePassSuccess" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Modifiche avvenute con successo</div>
+              <div *ngIf="changePassErr" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Password corrente errata</div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
