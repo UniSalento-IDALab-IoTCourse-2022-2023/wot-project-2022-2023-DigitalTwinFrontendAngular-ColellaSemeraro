@@ -7,7 +7,7 @@
       <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
     </select>
     <label for="teamFilter" class="mx-1">Filtra per squadra:</label>
-    <input type="text" id="teamFilter" class="mx-1" [(ngModel)]="selectedTeam">
+    <input type="text" id="teamFilter" class="mx-1" placeholder="Tutti" [(ngModel)]="selectedTeam">
     <button class="btn btn-primary mx-4" (click)="applyFilters()">Applica</button>
     <button class="btn btn-primary" (click)="openModalCreation()">Crea Nuovo Coach</button>
     <button class="btn btn-secondary mx-4" routerLink="/home-amministratore">Indietro</button>

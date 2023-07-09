@@ -17,6 +17,7 @@ import { GestioneprofilocoachComponent } from './components/gestioneprofilocoach
 import { GestioneallenamentiComponent } from './components/gestioneallenamenti/gestioneallenamenti.component';
 import { GestioneallenamentiatletaComponent } from './components/gestioneallenamentiatleta/gestioneallenamentiatleta.component';
 import { GestioneprofiloatletaComponent } from './components/gestioneprofiloatleta/gestioneprofiloatleta.component';
+import { AllenamentiamministratoreComponent } from './components/allenamentiamministratore/allenamentiamministratore.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { GestioneprofiloatletaComponent } from './components/gestioneprofiloatle
     GestioneprofilocoachComponent,
     GestioneallenamentiComponent,
     GestioneallenamentiatletaComponent,
-    GestioneprofiloatletaComponent
+    GestioneprofiloatletaComponent,
+    AllenamentiamministratoreComponent
   ],
   imports: [
     BrowserModule,

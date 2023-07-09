@@ -146,6 +146,7 @@ export class GestionecoachComponent implements OnInit{
     }, 100);
   }
 
+
   openModalCreation() {
     const modal = document.getElementById('modalCoachCreation');
     if (modal) {
