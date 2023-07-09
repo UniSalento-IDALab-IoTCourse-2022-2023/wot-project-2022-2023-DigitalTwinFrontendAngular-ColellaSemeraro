@@ -1,0 +1,117 @@
+<div class="container increased-font  mt-3">
+  <h1 class="centered-button">Lista Allenamenti</h1>
+  <div class="filter-container increased-font text-center mt-4">
+    <label for="typeFilter" class="mx-1">Filtra per tipologia:</label>
+    <select id="typeFilter" class="mx-1" [(ngModel)]="selectedTipo">
+      <option value="">Tutti</option>
+      <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+    </select>
+    <label for="teamFilter" class="mx-1">Filtra per nome:</label>
+    <input type="text" id="teamFilter" class="mx-1" placeholder="Tutti" [(ngModel)]="selectedNome">
+    <button class="btn btn-primary mx-4" (click)="applyFilters()">Applica</button>
+    <button class="btn btn-primary" (click)="openModalCreation()">Crea Nuovo Allenamento</button>
+    <button class="btn btn-secondary mx-4" routerLink="/home-amministratore">Indietro</button>
+  </div>
+  <div class="table-container mt-4">
+    <table class="table" >
+      <tr>
+        <th>Nome</th>
+        <th>Tipologia</th>
+      </tr>
+      <tr *ngFor="let allenamento of filteredAllenamenti">
+        <td>{{ allenamento.nome }}</td>
+        <td *ngIf="allenamento.tipologia !== ''">{{ allenamento.tipologia }}</td>
+        <td *ngIf="allenamento.tipologia == ''">Generale</td>
+        <td>
+          <button class="btn btn-primary" (click)="openModal(allenamento)">Modifica</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="modalAllenamento" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Dettagli Allenamento: {{allenamento.nome}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> {{allenamento.id}}</p>
+          <p *ngIf="allenamento.tipologia != ''"><strong>Tipologia:</strong> {{allenamento.tipologia}}</p>
+          <p *ngIf="allenamento.tipologia == ''"><strong>Tipologia:</strong> Generale</p>
+          <form #allenamentoFormUpdate="ngForm">
+            <div class="form-group">
+              <label for="nomeUpdate">Nome:</label>
+              <input type="text" class="form-control" id="nomeUpdate" name="nomeUpdate" [(ngModel)]="nomeAllenamento"
+                     required
+                     pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                     #inputNomeUpdate = "ngModel"
+                     [ngClass]="{'is-invalid': inputNomeUpdate.errors && inputNomeUpdate.invalid && inputNomeUpdate.touched && inputNomeUpdate.value !== ''}">
+              <div class="invalid-feedback">
+                Il nome non può contenere solo numeri.
+              </div>
+              <button class="btn btn-primary my-3"  [disabled]="!allenamentoFormUpdate.valid || !isFormContentModified()" (click)="checkIfAllenamentoEsisteUpdate()">Modifica Allenamento</button>
+              <button class="btn btn-secondary my-3 mx-2" (click)="closeModal()">Indietro</button>
+            </div></form>
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Modifiche avvenute con successo.</div>
+            <div *ngIf="errorReg && allenamento.tipologia != ''" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Esiste già un allenamento "{{allenamento.nome}}" del tipo "{{allenamento.tipologia}}".</div>
+          </div>
+          <div *ngIf="errorReg && allenamento.tipologia == ''" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Esiste già un allenamento "{{allenamento.nome}}" del tipo "Generale".</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalAllenamentoCreation" class="modal">
+    <div class="modal-dialog d-flex">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Inserire i dettagli per l'allenamento</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalCreation()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="creaAllenamentoClick()" #allenamentoForm="ngForm">
+                <div class="form-group">
+                  <label for="nome">Nome:</label>
+                  <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="newAllenamento.nome"
+                         required
+                         pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                         #inputNomeAllenamento = "ngModel"
+                         [ngClass]="{'is-invalid': inputNomeAllenamento.errors && inputNomeAllenamento.invalid && inputNomeAllenamento.touched && inputNomeAllenamento.value !== ''}">
+                  <div class="invalid-feedback">
+                    Il nome deve contenere solo lettere.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="tipoAllenamento">Tipo allenamento:</label>
+                  <select type="text" class="form-control" id="tipoAllenamento" name="tipoAllenamento" [(ngModel)]="newAllenamento.tipologia" required>
+                    <option [value]="">Generale</option>
+                    <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+                  </select>
+                </div>
+              <div class="centered-button">
+                <button type="submit" class="btn btn-primary mt-3" [disabled]="!allenamentoForm.valid">Crea Allenamento</button>
+                <button class="btn btn-secondary mx-3 mt-3" (click)="closeModalCreation()">Indietro</button>
+              </div>
+          </form>
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Registrazione avvenuta con successo.</div>
+            <div *ngIf="errorReg && newAllenamento.tipologia != ''" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Esiste già un allenamento "{{newAllenamento.nome}}" del tipo "{{newAllenamento.tipologia}}"</div>
+          </div>
+          <div *ngIf="errorReg && newAllenamento.tipologia == ''" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Esiste già un allenamento "{{newAllenamento.nome}}" del tipo "Generale"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

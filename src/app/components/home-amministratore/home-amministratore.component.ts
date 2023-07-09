@@ -4,6 +4,8 @@ import {Atleta} from "../../models/Atleta";
 import {Coach} from "../../models/Coach";
 import {AtletaService} from "../../services/atleta.service";
 import {CoachService} from "../../services/coach.service";
+import {AllenamentoService} from "../../services/allenamento.service";
+import {Allenamento} from "../../models/Allenamento";
 
 @Component({
   selector: 'app-home-amministratore',
@@ -16,10 +18,14 @@ export class HomeAmministratoreComponent implements OnInit{
   jwt: string = '';
   atleti: Atleta[] = [];
   coaches: Coach[] = [];
+  allenamenti: Allenamento[] = [];
+  n_allenamenti: number = 0;
   n_atleti: number = 0;
   n_coach: number = 0;
+  squadre: Set<string> = new Set;
+  n_squadre: number = 0;
 
-  constructor(private atletaService: AtletaService, private coachService: CoachService) {
+  constructor(private atletaService: AtletaService, private coachService: CoachService, private allenamentoService: AllenamentoService) {
   }
 
   getNAtleti() {
@@ -39,11 +45,27 @@ export class HomeAmministratoreComponent implements OnInit{
     return this.coachService.getAllCoaches(this.jwt).subscribe(
       (coaches: Coach[]) => {
         this.coaches = coaches;
+        for(let i = 0; i < this.coaches.length; i++)
+          this.squadre.add(this.coaches[i].squadra);
+        this.n_squadre = this.squadre.size;
         console.log("Coach: ", this.coaches);
         this.n_coach = this.coaches.length;
       },
       (error) => {
         console.error("Errore nell'ottenimento del numero dei coach", error)
+      }
+    );
+  }
+
+  getNAllenamenti() {
+    return this.allenamentoService.getAllAllenamenti(this.jwt).subscribe(
+      (allenamenti: Allenamento[]) => {
+        this.allenamenti = allenamenti;
+        console.log("Allenamenti: ", this.allenamenti);
+        this.n_allenamenti = this.allenamenti.length;
+      },
+      (error) => {
+        console.error("Errore nell'ottenimento del numero degli allenamenti", error)
       }
     );
   }
@@ -69,6 +91,7 @@ export class HomeAmministratoreComponent implements OnInit{
 
       this.getNAtleti();
       this.getNCoach();
+      this.getNAllenamenti();
 
 
     } else {
