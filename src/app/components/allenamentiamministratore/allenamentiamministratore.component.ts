@@ -25,6 +25,7 @@ export class AllenamentiamministratoreComponent implements OnInit{
   allenamentoEsistente: boolean = false;
 
   types: string[] = ['Attaccante', 'Difensore', 'Centrocampista', 'Portiere'];
+  intensitas: string[] = ['Bassa', 'Media', 'Alta'];
 
   constructor(private allenamentoService: AllenamentoService) {}
 

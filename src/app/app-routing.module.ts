@@ -16,6 +16,8 @@ import {GestioneprofiloatletaComponent} from "./components/gestioneprofiloatleta
 import {
   AllenamentiamministratoreComponent
 } from "./components/allenamentiamministratore/allenamentiamministratore.component";
+import {ContattiComponent} from "./components/contatti/contatti.component";
+import {InformazioniComponent} from "./components/informazioni/informazioni.component";
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -29,7 +31,10 @@ const routes: Routes = [
   { path: 'gestione-allenamenti', component: GestioneallenamentiComponent },
   { path: 'gestione-allenamenti-atleta', component: GestioneallenamentiatletaComponent },
   { path: 'gestione-profilo-atleta', component: GestioneprofiloatletaComponent },
-  { path: 'allenamenti-amministratore', component: AllenamentiamministratoreComponent }
+  { path: 'allenamenti-amministratore', component: AllenamentiamministratoreComponent },
+  { path: 'contatti', component: ContattiComponent },
+  { path: 'informazioni', component: InformazioniComponent }
+
 ];
 
 @NgModule({

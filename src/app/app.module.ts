@@ -18,6 +18,8 @@ import { GestioneallenamentiComponent } from './components/gestioneallenamenti/g
 import { GestioneallenamentiatletaComponent } from './components/gestioneallenamentiatleta/gestioneallenamentiatleta.component';
 import { GestioneprofiloatletaComponent } from './components/gestioneprofiloatleta/gestioneprofiloatleta.component';
 import { AllenamentiamministratoreComponent } from './components/allenamentiamministratore/allenamentiamministratore.component';
+import { InformazioniComponent } from './components/informazioni/informazioni.component';
+import { ContattiComponent } from './components/contatti/contatti.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { AllenamentiamministratoreComponent } from './components/allenamentiammi
     GestioneallenamentiComponent,
     GestioneallenamentiatletaComponent,
     GestioneprofiloatletaComponent,
-    AllenamentiamministratoreComponent
+    AllenamentiamministratoreComponent,
+    InformazioniComponent,
+    ContattiComponent
   ],
   imports: [
     BrowserModule,
