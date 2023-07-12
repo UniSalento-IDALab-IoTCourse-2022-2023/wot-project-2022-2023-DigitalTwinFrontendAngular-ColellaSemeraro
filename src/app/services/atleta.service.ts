@@ -110,4 +110,15 @@ export class AtletaService {
 
   }
 
+  getAtletaByUsername(jwt: string, username: string): Observable<Atleta> {
+
+    const url = "http://localhost:8080/api/users/atleta/find/username/"+username;
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    return this.http.get<Atleta>(url, this.httpOptions);
+
+
+  }
+
 }

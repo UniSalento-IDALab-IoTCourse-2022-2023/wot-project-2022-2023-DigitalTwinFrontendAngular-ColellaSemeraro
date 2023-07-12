@@ -20,6 +20,7 @@ import { GestioneprofiloatletaComponent } from './components/gestioneprofiloatle
 import { AllenamentiamministratoreComponent } from './components/allenamentiamministratore/allenamentiamministratore.component';
 import { InformazioniComponent } from './components/informazioni/informazioni.component';
 import { ContattiComponent } from './components/contatti/contatti.component';
+import { StoricoallenamentiComponent } from './components/storicoallenamenti/storicoallenamenti.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ContattiComponent } from './components/contatti/contatti.component';
     GestioneprofiloatletaComponent,
     AllenamentiamministratoreComponent,
     InformazioniComponent,
-    ContattiComponent
+    ContattiComponent,
+    StoricoallenamentiComponent
   ],
   imports: [
     BrowserModule,

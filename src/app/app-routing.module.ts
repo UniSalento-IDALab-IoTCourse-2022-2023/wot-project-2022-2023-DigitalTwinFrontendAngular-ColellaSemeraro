@@ -18,6 +18,7 @@ import {
 } from "./components/allenamentiamministratore/allenamentiamministratore.component";
 import {ContattiComponent} from "./components/contatti/contatti.component";
 import {InformazioniComponent} from "./components/informazioni/informazioni.component";
+import {StoricoallenamentiComponent} from "./components/storicoallenamenti/storicoallenamenti.component";
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -33,7 +34,8 @@ const routes: Routes = [
   { path: 'gestione-profilo-atleta', component: GestioneprofiloatletaComponent },
   { path: 'allenamenti-amministratore', component: AllenamentiamministratoreComponent },
   { path: 'contatti', component: ContattiComponent },
-  { path: 'informazioni', component: InformazioniComponent }
+  { path: 'informazioni', component: InformazioniComponent },
+  { path: 'storico-allenamenti', component: StoricoallenamentiComponent }
 
 ];
 

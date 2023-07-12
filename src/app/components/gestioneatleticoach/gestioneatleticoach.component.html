@@ -26,7 +26,7 @@
         <td>{{ atleta.dataNascita | date }}</td>
         <td>
           <button class="btn btn-primary" (click)="openModal(atleta)">Dettagli</button>
-          <button class="btn btn-primary mx-2">Allenamenti</button>
+          <button class="btn btn-primary mx-2" (click)="allenamentiClick(atleta)">Allenamenti</button>
         </td>
       </tr>
     </table>

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Coach} from "../../models/Coach";
 import {Atleta} from "../../models/Atleta";
 import {AtletaService} from "../../services/atleta.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-gestioneatleticoach',
@@ -19,7 +20,7 @@ export class GestioneatleticoachComponent implements OnInit {
   altezza: number = 0;
   peso: number = 0;
 
-  constructor(private atletaService: AtletaService) {
+  constructor(private atletaService: AtletaService, private router: Router) {
 
   }
 
@@ -87,6 +88,11 @@ export class GestioneatleticoachComponent implements OnInit {
     setTimeout(() => {
       window.location.reload();
     }, 100);
+  }
+
+  allenamentiClick(atleta: Atleta) {
+    localStorage.setItem('Atleta', JSON.stringify(atleta))
+    this.router.navigate(['storico-allenamenti'])
   }
 
 
