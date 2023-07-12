@@ -21,6 +21,7 @@ import { AllenamentiamministratoreComponent } from './components/allenamentiammi
 import { InformazioniComponent } from './components/informazioni/informazioni.component';
 import { ContattiComponent } from './components/contatti/contatti.component';
 import { StoricoallenamentiComponent } from './components/storicoallenamenti/storicoallenamenti.component';
+import { StoricorisultatiatletaComponent } from './components/storicorisultatiatleta/storicorisultatiatleta.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { StoricoallenamentiComponent } from './components/storicoallenamenti/sto
     AllenamentiamministratoreComponent,
     InformazioniComponent,
     ContattiComponent,
-    StoricoallenamentiComponent
+    StoricoallenamentiComponent,
+    StoricorisultatiatletaComponent
   ],
   imports: [
     BrowserModule,

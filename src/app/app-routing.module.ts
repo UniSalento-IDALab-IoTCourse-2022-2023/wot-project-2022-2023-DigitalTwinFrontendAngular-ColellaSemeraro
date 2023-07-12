@@ -19,6 +19,7 @@ import {
 import {ContattiComponent} from "./components/contatti/contatti.component";
 import {InformazioniComponent} from "./components/informazioni/informazioni.component";
 import {StoricoallenamentiComponent} from "./components/storicoallenamenti/storicoallenamenti.component";
+import {StoricorisultatiatletaComponent} from "./components/storicorisultatiatleta/storicorisultatiatleta.component";
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -35,7 +36,8 @@ const routes: Routes = [
   { path: 'allenamenti-amministratore', component: AllenamentiamministratoreComponent },
   { path: 'contatti', component: ContattiComponent },
   { path: 'informazioni', component: InformazioniComponent },
-  { path: 'storico-allenamenti', component: StoricoallenamentiComponent }
+  { path: 'storico-allenamenti', component: StoricoallenamentiComponent },
+  { path: 'storico-risultati-atleta', component: StoricorisultatiatletaComponent }
 
 ];
 
