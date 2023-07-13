@@ -41,8 +41,64 @@ export class GestioneallenamentiComponent implements OnInit{
   types: string[] = [this.coach.ruoloAllenato];
   intensitas: string[] = ['Medio/Bassa', 'Alta'];
 
+  dayFilter: number | undefined;
+  monthFilter: number | undefined;
+  yearFilter: number | undefined;
+
+  filteredHRV: HRV[] = [];
+
   constructor(private atletaService: AtletaService, private hrvService: HrvService, private assegnazioneService: AssegnazioneService,
               private allenamentoService: AllenamentoService) {
+  }
+
+  applyFilter(): void {
+    this.filteredHRV = this.listaHRV.filter((hrv: HRV) => {
+      const filterYear = this.yearFilter || new Date().getFullYear();
+      const filterMonth = this.monthFilter;
+      const filterDay = this.dayFilter;
+
+      const conferimentoDate = new Date(hrv.data);
+      const conferimentoYear = conferimentoDate.getFullYear();
+      const conferimentoMonth = conferimentoDate.getMonth() + 1;
+      const conferimentoDay = conferimentoDate.getDate();
+
+      if (filterMonth && filterDay) {
+        // Filtro per giorno, mese e anno
+        return (
+          conferimentoYear === filterYear &&
+          conferimentoMonth === filterMonth &&
+          conferimentoDay === filterDay
+        );
+      } else if (filterMonth) {
+        // Filtro per mese e anno
+        return (
+          conferimentoYear === filterYear &&
+          conferimentoMonth === filterMonth
+        );
+      } else {
+        // Filtro solo per anno
+        return conferimentoYear === filterYear;
+      }
+    });
+    console.log(this.filteredHRV);
+  }
+
+
+  filterNumericInput(event: any): void {
+    const input = event.target;
+    const inputValue = input.value;
+
+    // Rimuove i caratteri non numerici
+    input.value = inputValue.replace(/\D/, '');
+  }
+
+  resetFilters(): void {
+    if (!this.yearFilter) {
+      this.monthFilter = undefined;
+      this.dayFilter = undefined;
+    } else if (!this.monthFilter) {
+      this.dayFilter = undefined;
+    }
   }
 
   getUsernameAtleti() {
@@ -68,7 +124,16 @@ export class GestioneallenamentiComponent implements OnInit{
         this.listaHRV = listaHRV;
         this.listaHRV = orderBy(listaHRV, 'data', 'desc');
 
-        for (const hrv of this.listaHRV) {
+        const currentMonth = new Date().getMonth() + 1; // Ottieni il mese corrente
+        const currentYear = new Date().getFullYear(); // Ottieni l'anno corrente
+
+        this.monthFilter = parseInt(currentMonth.toString(), 10);
+        this.yearFilter = parseInt(currentYear.toString(), 10);
+
+        // Applica i filtri
+        this.applyFilter();
+
+        for (const hrv of this.filteredHRV) {
           // Esegui la chiamata API checkifExistsByIdRisultatoPrecedente
           this.assegnazioneService.checkifExistsByIdRisultatoPrecedente(this.jwt, hrv.id).subscribe(
             (exists: boolean) => {

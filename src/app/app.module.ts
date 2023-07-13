@@ -22,6 +22,8 @@ import { InformazioniComponent } from './components/informazioni/informazioni.co
 import { ContattiComponent } from './components/contatti/contatti.component';
 import { StoricoallenamentiComponent } from './components/storicoallenamenti/storicoallenamenti.component';
 import { StoricorisultatiatletaComponent } from './components/storicorisultatiatleta/storicorisultatiatleta.component';
+import { GraficorisultaticoachComponent } from './components/graficorisultaticoach/graficorisultaticoach.component';
+import { GraficorisultatiatletaComponent } from './components/graficorisultatiatleta/graficorisultatiatleta.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { StoricorisultatiatletaComponent } from './components/storicorisultatiat
     InformazioniComponent,
     ContattiComponent,
     StoricoallenamentiComponent,
-    StoricorisultatiatletaComponent
+    StoricorisultatiatletaComponent,
+    GraficorisultaticoachComponent,
+    GraficorisultatiatletaComponent
   ],
   imports: [
     BrowserModule,

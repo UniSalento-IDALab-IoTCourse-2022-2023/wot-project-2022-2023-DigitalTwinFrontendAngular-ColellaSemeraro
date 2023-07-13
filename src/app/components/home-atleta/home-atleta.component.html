@@ -1,5 +1,20 @@
+<p class="mt-1 nome-squadra">{{ atleta.squadra }}</p>
 <div class="d-flex justify-content-center align-items-center flex-column">
   <h2 class="mt-4">Ciao {{atleta.nome}}</h2>
   <p>Benvenuto nella tua dashboard di atleta!</p>
-  <h4 class="mt-1">Squadra: {{atleta.squadra}}</h4>
+  <ng-container *ngIf="allenamentoAssegnato">
+    <h5 class="mt-3">Ecco il tuo allenamento assegnato per oggi:</h5>
+    <h4 class="mt-2">{{ allenamento.nome }}</h4>
+    <h5 class="mt-2">Intensità {{ allenamento.intensita }}</h5>
+    <div class="d-flex justify-content-center align-items-center flex-column"  *ngIf="assegnazione.numeroCircuiti != 0">
+      <h5 class="mt-2">N. Circuiti: {{ assegnazione.numeroCircuiti }}</h5>
+      <h5 class="mt-2">Durata Circuiti: {{ assegnazione.durataCircuiti }} min</h5>
+      <h5 class="mt-2">Durata Totale: {{ assegnazione.durataInMinuti }} min</h5>
+    </div>
+    <h5 class="mt-2" *ngIf="assegnazione.numeroCircuiti == 0">Durata: {{ assegnazione.durataInMinuti }}</h5>
+    <p class="mt-2">{{ assegnazione.dataAssegnazione | date: 'dd/MM/yyyy' }}</p>
+  </ng-container>
+  <ng-container *ngIf="!allenamentoAssegnato">
+    <h4 class="mt-3">Oggi non hai allenamenti in programma, goditi il riposo!</h4>
+  </ng-container>
 </div>

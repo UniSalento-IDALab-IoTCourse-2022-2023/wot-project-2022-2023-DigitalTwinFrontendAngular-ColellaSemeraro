@@ -64,4 +64,14 @@ export class AllenamentoService {
 
   }
 
+  getAllenamentoById(jwt: string, idAllenamento: string): Observable<Allenamento> {
+
+    const url = "http://localhost:8081/api/allenamenti/findById/"+idAllenamento;
+
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
+
+    return this.http.get<Allenamento>(url, this.httpOptions);
+
+  }
+
 }

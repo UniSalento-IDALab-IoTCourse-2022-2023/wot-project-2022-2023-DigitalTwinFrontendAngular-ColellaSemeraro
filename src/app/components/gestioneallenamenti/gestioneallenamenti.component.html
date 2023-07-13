@@ -1,6 +1,18 @@
 <div class="container increased-font  mt-3">
 <h3 class="centered-button">Elenco risultati allenamenti dei tuoi atleti</h3>
-  <button class="btn btn-secondary" routerLink="/home-coach">Indietro</button>
+  <div class="centered-button">
+    <button class="btn btn-primary" routerLink="/grafico-risultati-coach">Visualizza su Grafico</button>
+    <button class="btn btn-secondary mx-2" routerLink="/home-coach">Indietro</button>
+  </div>
+  <div class="filter-container increased-font text-center mt-4">
+    <label for="dayFilter">Filtra per giorno:</label>
+    <input type="number" id="dayFilter" [(ngModel)]="dayFilter" placeholder="Giorno" min="1" max="31" inputmode="numeric" [disabled]="!yearFilter || !monthFilter" (input)="filterNumericInput($event)">
+    <label for="monthFilter">Filtra per mese:</label>
+    <input type="number" id="monthFilter" [(ngModel)]="monthFilter" placeholder="Mese" min="1" max="12" inputmode="numeric" [disabled]="!yearFilter" (input)="filterNumericInput($event)">
+    <label for="yearFilter">Filtra per anno:</label>
+    <input type="number" id="yearFilter" [(ngModel)]="yearFilter" placeholder="Anno" min="2000" max="2100" inputmode="numeric" (input)="filterNumericInput($event); resetFilters()">
+    <button class="btn btn-primary mx-4" (click)="applyFilter()">Applica</button>
+    <div class="table-container mt-4">
   <div class="table-container mt-4">
     <table class="table" >
       <tr>
@@ -9,7 +21,7 @@
         <th>Data</th>
         <th>Intensità allenamento</th>
       </tr>
-      <tr *ngFor="let hrv of listaHRV">
+      <tr *ngFor="let hrv of filteredHRV">
         <td>{{ hrv.usernameAtleta }}</td>
         <td>{{ hrv.median_nni }}</td>
         <td>{{ hrv.data | date }}</td>
@@ -45,9 +57,9 @@
             </select>
             <br>
             <label for="teamFilter" class="mx-1 mt-2">Filtra per nome: </label>
-            <input type="text" id="teamFilter" class="mx-4 mt-2" placeholder="Tutti" [(ngModel)]="selectedNome">
+            <input type="text" id="teamFilter" class="mx-2 mt-2" placeholder="Tutti" [(ngModel)]="selectedNome">
             <br>
-            <button class="btn btn-primary mx-1" (click)="applyFilters()">Applica</button>
+            <button class="btn btn-primary mt-2" (click)="applyFilters()">Applica</button>
           </div>
           <div class="table-container mt-4">
             <table class="table" >
