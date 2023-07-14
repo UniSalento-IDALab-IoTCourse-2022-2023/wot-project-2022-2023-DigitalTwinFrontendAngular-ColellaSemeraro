@@ -1,40 +1,38 @@
 import {Component, OnInit} from '@angular/core';
 import {Atleta} from "../../models/Atleta";
-import {AssegnazioneService} from "../../services/assegnazione.service";
-import {AssegnazioneAllenamento} from "../../models/AssegnazioneAllenamento";
+import {HRV} from "../../models/HRV";
+import {HrvService} from "../../services/hrv.service";
 import {orderBy} from "lodash";
-import {AllenamentoService} from "../../services/allenamento.service";
-import {Allenamento} from "../../models/Allenamento";
+import {AssegnazioneAllenamento} from "../../models/AssegnazioneAllenamento";
 
 @Component({
-  selector: 'app-gestioneallenamentiatleta',
-  templateUrl: './gestioneallenamentiatleta.component.html',
-  styleUrls: ['./gestioneallenamentiatleta.component.scss']
+  selector: 'app-storicorisultatiatleta',
+  templateUrl: './storicorisultatiatleta.component.html',
+  styleUrls: ['./storicorisultatiatleta.component.scss']
 })
-export class GestioneallenamentiatletaComponent implements OnInit{
+export class StoricorisultatiatletaComponent implements OnInit {
 
   atleta: Atleta = {} as Atleta;
   jwt: string = '';
-  assegnazioni: AssegnazioneAllenamento[] = [];
-  assegnazione: AssegnazioneAllenamento = {} as AssegnazioneAllenamento;
-  allenamento: Allenamento = {} as Allenamento;
+  usernameAtleta: string[] = [];
+  listaHRV: HRV[] = [];
 
   dayFilter: number | undefined;
   monthFilter: number | undefined;
   yearFilter: number | undefined;
 
-  filteredAssegnazioni: AssegnazioneAllenamento[] = []; // Array dei conferimenti filtrati
+  filteredHRV: HRV[] = [];
 
-  constructor(private assegnazioneService: AssegnazioneService, private allenamentoService: AllenamentoService) {
+  constructor(private hrvService: HrvService) {
   }
 
   applyFilter(): void {
-    this.filteredAssegnazioni = this.assegnazioni.filter((assegnazione: AssegnazioneAllenamento) => {
+    this.filteredHRV = this.listaHRV.filter((hrv: HRV) => {
       const filterYear = this.yearFilter || new Date().getFullYear();
       const filterMonth = this.monthFilter;
       const filterDay = this.dayFilter;
 
-      const conferimentoDate = new Date(assegnazione.dataAssegnazione);
+      const conferimentoDate = new Date(hrv.data);
       const conferimentoYear = conferimentoDate.getFullYear();
       const conferimentoMonth = conferimentoDate.getMonth() + 1;
       const conferimentoDay = conferimentoDate.getDate();
@@ -57,7 +55,7 @@ export class GestioneallenamentiatletaComponent implements OnInit{
         return conferimentoYear === filterYear;
       }
     });
-    console.log(this.filteredAssegnazioni);
+    console.log(this.filteredHRV);
   }
 
 
@@ -78,32 +76,12 @@ export class GestioneallenamentiatletaComponent implements OnInit{
     }
   }
 
-  openModal(assegnazione: AssegnazioneAllenamento) {
-
-    this.assegnazione = assegnazione;
-
-    this.getAllenamento();
-
-    const modal = document.getElementById('modalAllenamento');
-    if (modal) {
-      modal.style.display = 'block';
-    }
-  }
-
-  // Funzione per chiudere il modal
-  closeModal() {
-    const modal = document.getElementById('modalAllenamento');
-    if (modal) {
-      modal.style.display = 'none';
-    }
-  }
-
-  getAllenamenti() {
-    return this.assegnazioneService.findAllByIdAtleta(this.jwt, this.atleta.id).subscribe(
-      (assegnazioni: AssegnazioneAllenamento[]) => {
-        console.log(assegnazioni);
-        this.assegnazioni = assegnazioni;
-        this.assegnazioni = orderBy(assegnazioni, 'dataAssegnazione', 'desc')
+  getRisultatiHRV() {
+    return this.hrvService.getHRVByAtleti(this.jwt, this.usernameAtleta).subscribe(
+      (listaHRV: HRV[]) => {
+        console.log(listaHRV);
+        this.listaHRV = listaHRV;
+        this.listaHRV = orderBy(listaHRV, 'data', 'desc');
 
         const currentMonth = new Date().getMonth() + 1; // Ottieni il mese corrente
         const currentYear = new Date().getFullYear(); // Ottieni l'anno corrente
@@ -115,20 +93,8 @@ export class GestioneallenamentiatletaComponent implements OnInit{
         this.applyFilter();
 
       },
-      (error:any) => {
-        console.error("Errore durante l'ottenimento delle assegnazioni per l'atleta.", error);
-      }
-    );
-  }
-
-  getAllenamento() {
-    return this.allenamentoService.getAllenamentoById(this.jwt, this.assegnazione.idAllenamento).subscribe(
-      (allenamento: Allenamento) => {
-        console.log(allenamento);
-        this.allenamento = allenamento;
-      },
       (error: any) => {
-        console.error("Errore durante il recupero dell'allenamento.", error);
+        console.error("Errore durante l'ottenimento delle metriche HRV.", error);
       }
     );
   }
@@ -151,7 +117,8 @@ export class GestioneallenamentiatletaComponent implements OnInit{
         }, 500);
       }
 
-      this.getAllenamenti();
+      this.usernameAtleta.push(this.atleta.username);
+      this.getRisultatiHRV();
 
     } else {
       // Gestisci il caso in cui l'oggetto currentUser non sia presente nel localStorage
@@ -159,7 +126,5 @@ export class GestioneallenamentiatletaComponent implements OnInit{
     }
 
   }
-
-
 
 }

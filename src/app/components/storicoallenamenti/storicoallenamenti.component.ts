@@ -1,18 +1,20 @@
 import {Component, OnInit} from '@angular/core';
+import {Coach} from "../../models/Coach";
 import {Atleta} from "../../models/Atleta";
 import {AssegnazioneService} from "../../services/assegnazione.service";
 import {AssegnazioneAllenamento} from "../../models/AssegnazioneAllenamento";
 import {orderBy} from "lodash";
-import {AllenamentoService} from "../../services/allenamento.service";
 import {Allenamento} from "../../models/Allenamento";
+import {AllenamentoService} from "../../services/allenamento.service";
 
 @Component({
-  selector: 'app-gestioneallenamentiatleta',
-  templateUrl: './gestioneallenamentiatleta.component.html',
-  styleUrls: ['./gestioneallenamentiatleta.component.scss']
+  selector: 'app-storicoallenamenti',
+  templateUrl: './storicoallenamenti.component.html',
+  styleUrls: ['./storicoallenamenti.component.scss']
 })
-export class GestioneallenamentiatletaComponent implements OnInit{
+export class StoricoallenamentiComponent implements OnInit {
 
+  coach: Coach = {} as Coach;
   atleta: Atleta = {} as Atleta;
   jwt: string = '';
   assegnazioni: AssegnazioneAllenamento[] = [];
@@ -84,7 +86,7 @@ export class GestioneallenamentiatletaComponent implements OnInit{
 
     this.getAllenamento();
 
-    const modal = document.getElementById('modalAllenamento');
+    const modal = document.getElementById('modalAllenamentoAtleta');
     if (modal) {
       modal.style.display = 'block';
     }
@@ -92,11 +94,12 @@ export class GestioneallenamentiatletaComponent implements OnInit{
 
   // Funzione per chiudere il modal
   closeModal() {
-    const modal = document.getElementById('modalAllenamento');
+    const modal = document.getElementById('modalAllenamentoAtleta');
     if (modal) {
       modal.style.display = 'none';
     }
   }
+
 
   getAllenamenti() {
     return this.assegnazioneService.findAllByIdAtleta(this.jwt, this.atleta.id).subscribe(
@@ -137,14 +140,17 @@ export class GestioneallenamentiatletaComponent implements OnInit{
 
     // Recupera l'oggetto currentUser dal localStorage
     const currentUserJSON = localStorage.getItem('currentUser')!;
+    const atletaJSON = localStorage.getItem('Atleta');
 
     // Verifica se l'oggetto currentUser è presente nel localStorage
-    if (currentUserJSON) {
+    if (currentUserJSON && atletaJSON) {
       // Parsa l'oggetto JSON e ottieni il token
       const currentUser = JSON.parse(currentUserJSON);
-      this.atleta = currentUser.atleta;
+      const atleta = JSON.parse(atletaJSON);
+      this.coach = currentUser.coach;
       this.jwt = currentUser.token;
-      if (this.atleta == undefined) {
+      this.atleta = atleta;
+      if (this.coach == undefined || this.atleta == undefined) {
         // ricarica la pagina per far inizializzare correttamente il cliente
         setTimeout(() => {
           window.location.reload();
@@ -159,7 +165,5 @@ export class GestioneallenamentiatletaComponent implements OnInit{
     }
 
   }
-
-
 
 }

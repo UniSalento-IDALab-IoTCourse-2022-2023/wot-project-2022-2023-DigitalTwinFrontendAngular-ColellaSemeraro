@@ -190,7 +190,7 @@ export class GestioneallenamentiComponent implements OnInit{
       this.nuovaAssegnazione.idAtleta = this.atleta.id;
     }
 
-    return this.assegnazioneService.creaNuovaAssegnazione(this.jwt, this.nuovaAssegnazione).subscribe(
+    return this.assegnazioneService.creaNuovaAssegnazione(this.jwt, this.nuovaAssegnazione, this.coach.id).subscribe(
       (assegnazione: AssegnazioneAllenamento) => {
         console.log(assegnazione);
         this.successReg = true;

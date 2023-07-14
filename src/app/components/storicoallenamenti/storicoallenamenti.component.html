@@ -1,9 +1,6 @@
-<div class="container increased-font  mt-3">
-  <h3 class="centered-button">Elenco dei tuoi allenamenti</h3>
-  <div class="centered-button">
-    <button class="btn btn-primary mt-3" routerLink="/storico-risultati-atleta/">Visualizza storico risultati</button>
-    <button class="btn btn-secondary mt-3 mx-3" routerLink="/home-atleta">Indietro</button>
-  </div>
+<div class="container increased-font mt-3 centered-button">
+  <h3>Storico Allenamenti per {{atleta.nome}} {{atleta.cognome}}</h3>
+  <button class="btn btn-secondary mt-2" routerLink="/gestione-atleti-coach">Indietro</button>
   <div class="filter-container increased-font text-center mt-4">
     <label for="dayFilter">Filtra per giorno:</label>
     <input type="number" id="dayFilter" [(ngModel)]="dayFilter" placeholder="Giorno" min="1" max="31" inputmode="numeric" [disabled]="!yearFilter || !monthFilter" (input)="filterNumericInput($event)">
@@ -32,7 +29,7 @@
       </tr>
     </table>
   </div>
-  <div id="modalAllenamento" class="modal">
+  <div id="modalAllenamentoAtleta" class="modal">
     <div class="modal-dialog d-flex">
       <div class="modal-content">
         <div class="modal-header">
@@ -43,7 +40,7 @@
         </div>
         <div class="modal-body">
           <p><strong>Allenamento:</strong> {{ allenamento.nome }}</p>
-          <p><strong>Tipologia:</strong> {{ allenamento.tipologia }}</p>
+          <p *ngIf="allenamento.tipologia != ''"><strong>Tipologia:</strong> {{ allenamento.tipologia }}</p>
           <p *ngIf="allenamento.tipologia == ''"><strong>Tipologia:</strong> Generale</p>
           <p><strong>Intensità:</strong> {{allenamento.intensita}}</p>
           <p *ngIf="assegnazione.numeroCircuiti != 0"><strong>Numero Circuiti:</strong> {{ assegnazione.numeroCircuiti }} min</p>

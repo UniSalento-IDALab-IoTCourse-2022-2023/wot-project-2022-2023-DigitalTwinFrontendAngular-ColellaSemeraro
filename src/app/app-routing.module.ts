@@ -22,6 +22,9 @@ import {StoricoallenamentiComponent} from "./components/storicoallenamenti/stori
 import {StoricorisultatiatletaComponent} from "./components/storicorisultatiatleta/storicorisultatiatleta.component";
 import {GraficorisultaticoachComponent} from "./components/graficorisultaticoach/graficorisultaticoach.component";
 import {GraficorisultatiatletaComponent} from "./components/graficorisultatiatleta/graficorisultatiatleta.component";
+import {GuidaamministratoreComponent} from "./components/guidaamministratore/guidaamministratore.component";
+import {GuidacoachComponent} from "./components/guidacoach/guidacoach.component";
+import {GuidaatletaComponent} from "./components/guidaatleta/guidaatleta.component";
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -41,7 +44,10 @@ const routes: Routes = [
   { path: 'storico-allenamenti', component: StoricoallenamentiComponent },
   { path: 'storico-risultati-atleta', component: StoricorisultatiatletaComponent },
   { path: 'grafico-risultati-coach', component: GraficorisultaticoachComponent },
-  { path: 'grafico-risultati-atleta', component: GraficorisultatiatletaComponent }
+  { path: 'grafico-risultati-atleta', component: GraficorisultatiatletaComponent },
+  { path: 'guida-amministratore', component: GuidaamministratoreComponent },
+  { path: 'guida-coach', component: GuidacoachComponent },
+  { path: 'guida-atleta', component: GuidaatletaComponent }
 
 ];
 

@@ -24,6 +24,9 @@ import { StoricoallenamentiComponent } from './components/storicoallenamenti/sto
 import { StoricorisultatiatletaComponent } from './components/storicorisultatiatleta/storicorisultatiatleta.component';
 import { GraficorisultaticoachComponent } from './components/graficorisultaticoach/graficorisultaticoach.component';
 import { GraficorisultatiatletaComponent } from './components/graficorisultatiatleta/graficorisultatiatleta.component';
+import { GuidaamministratoreComponent } from './components/guidaamministratore/guidaamministratore.component';
+import { GuidacoachComponent } from './components/guidacoach/guidacoach.component';
+import { GuidaatletaComponent } from './components/guidaatleta/guidaatleta.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { GraficorisultatiatletaComponent } from './components/graficorisultatiat
     StoricoallenamentiComponent,
     StoricorisultatiatletaComponent,
     GraficorisultaticoachComponent,
-    GraficorisultatiatletaComponent
+    GraficorisultatiatletaComponent,
+    GuidaamministratoreComponent,
+    GuidacoachComponent,
+    GuidaatletaComponent
   ],
   imports: [
     BrowserModule,

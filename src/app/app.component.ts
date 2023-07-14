@@ -24,6 +24,7 @@ export class AppComponent implements OnInit{
   ifAmministratore: boolean = false;
   ifCoach: boolean = false;
   ifAtleta: boolean = false;
+  linkHrefGuida: string = '';
 
 
   constructor(private usersService: UsersService, private router: Router) {
@@ -59,16 +60,19 @@ export class AppComponent implements OnInit{
       const jwt = currentUser.token;
       if (this.coach != undefined) {
         this.linkHrefHome = '/home-coach'
+        this.linkHrefGuida = '/guida-coach'
         this.ifCoach = true;
       } else {
         this.atleta = currentUser.atleta;
         if(this.atleta != undefined) {
           this.linkHrefHome = '/home-atleta'
+          this.linkHrefGuida = '/guida-atleta'
           this.ifAtleta = true;
         } else {
           this.amministratore = currentUser.amministratore;
           if(this.amministratore != undefined) {
             this.linkHrefHome = '/home-amministratore'
+            this.linkHrefGuida = '/guida-amministratore'
             this.ifAmministratore = true;
           }
         }}

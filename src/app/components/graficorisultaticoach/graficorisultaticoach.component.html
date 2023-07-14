@@ -1,0 +1,11 @@
+<div class="chart-container">
+  <div class="centered-button mt-3">
+    <div class="btn btn-secondary" routerLink="/gestione-allenamenti">Indietro</div>
+    <label for="usernameFilter" class="mx-4">Seleziona un atleta specifico: </label>
+    <select id="usernameFilter" [(ngModel)]="selectedAtleta" (ngModelChange)="updateChart()">
+      <option value="">Tutti</option>
+      <option *ngFor="let username of usernameAtleti" [value]="username">{{ username }}</option>
+    </select>
+  </div>
+  <canvas  id="MyChart" class="mt-3" >{{ chart }}</canvas>
+</div>

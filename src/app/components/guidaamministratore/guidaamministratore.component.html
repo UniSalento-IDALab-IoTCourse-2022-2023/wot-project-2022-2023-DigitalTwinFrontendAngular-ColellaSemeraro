@@ -1,0 +1,43 @@
+<div class="container">
+  <h2 class="mt-3">Guida per l'Amministratore</h2>
+  <ul class="mt-4">
+    <li class="mt-3"><strong>Home:</strong> Qui puoi vedere informazioni relative al numero di atleti, di squadre e di allenamenti memorizzati nel sistema.</li>
+    <li class="mt-3"><strong>Gestione Atleti:</strong> Qui puoi visualizzare l'elenco di tutti gli atleti, visualizzarne le informazioni nel dettaglio e modifcarne la squadra. In tal caso, puoi subito assegnare un coach dello stesso ruolo della nuova squadra, se è disponibile.
+      <ul class="mt-2">Puoi, inoltre, creare nuovi atleti, specificando:
+        <li>Nome</li>
+        <li>Cognome</li>
+        <li>Squadra</li>
+        <li>Posizione in campo</li>
+        <li>Coach da assegnare (se disponibile, il coach viene selezionato automaticamente una volta definita la squadra)</li>
+        <li>Email</li>
+        <li>Data di nascita</li>
+        <li>Username</li>
+        <li>Password</li>
+        <li>Altezza in centimetri</li>
+        <li>Peso in chilogrammi</li>
+      </ul>
+    </li>
+    <li class="mt-3"><strong>Gestione Coach:</strong> Qui puoi visualizzare l'elenco di tutti i coach, visualizzarne le informazioni nel dettaglio e modifcarne ruolo allenato e squadra (soltanto se non seguono nessun atleta).
+      <ul class="mt-2">Puoi, inoltre, creare nuovi atleti, specificando:
+        <li>Nome</li>
+        <li>Cognome</li>
+        <li>Email</li>
+        <li>Data di nascita</li>
+        <li>Username</li>
+        <li>Password</li>
+        <li>Squadra</li>
+        <li>Ruolo allenato</li>
+      </ul>
+    </li>
+    <li class="mt-3"><strong>Gestione Allenamenti:</strong> Qui puoi visualizzare l'elenco di tutti gli allenamenti, visualizzarne le informazioni e modificare il nome.
+      <ul class="mt-2">Puoi creare nuovi allenamenti, definendo:
+        <li>Nome</li>
+        <li>Tipo (Attaccante, Difensore, Portiere o Generale)</li>
+        <li>Intensità (Alta, Media, Bassa)</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="centered-button">
+    <button class="btn btn-secondary mt-4" (click)="goBack()">Indietro</button>
+  </div>
+</div>
