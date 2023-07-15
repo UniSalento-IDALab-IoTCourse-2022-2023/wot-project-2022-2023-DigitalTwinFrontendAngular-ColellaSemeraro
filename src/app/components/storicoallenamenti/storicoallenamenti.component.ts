@@ -8,6 +8,8 @@ import {Allenamento} from "../../models/Allenamento";
 import {AllenamentoService} from "../../services/allenamento.service";
 import {HRV} from "../../models/HRV";
 import {AtletaService} from "../../services/atleta.service";
+import {RealTimeHRV} from "../../models/RealTimeHRV";
+import {RealtimehrvService} from "../../services/realtimehrv.service";
 
 @Component({
   selector: 'app-storicoallenamenti',
@@ -37,6 +39,9 @@ export class StoricoallenamentiComponent implements OnInit {
   types: string[] = [this.coach.ruoloAllenato];
   intensitas: string[] = ['Medio/Bassa', 'Alta'];
   intensita: string = '';
+  realTimeHRV: RealTimeHRV = {} as RealTimeHRV;
+  integer: number = 0;
+  intervalId: any; // Variabile per memorizzare l'ID dell'intervallo
 
   selectedAllenamento: Allenamento | null = null;
 
@@ -46,7 +51,8 @@ export class StoricoallenamentiComponent implements OnInit {
 
   filteredAssegnazioni: AssegnazioneAllenamento[] = []; // Array dei conferimenti filtrati
 
-  constructor(private assegnazioneService: AssegnazioneService, private allenamentoService: AllenamentoService, private atletaService: AtletaService) {
+  constructor(private assegnazioneService: AssegnazioneService, private allenamentoService: AllenamentoService, private atletaService: AtletaService,
+              private realTimeHRVService: RealtimehrvService) {
   }
 
   applyFilter(): void {
@@ -129,6 +135,7 @@ export class StoricoallenamentiComponent implements OnInit {
 
         const currentMonth = new Date().getMonth() + 1; // Ottieni il mese corrente
         const currentYear = new Date().getFullYear(); // Ottieni l'anno corrente
+        const currentDay = new Date().getDate(); // Ottieni il giorno corrente
 
         this.monthFilter = parseInt(currentMonth.toString(), 10);
         this.yearFilter = parseInt(currentYear.toString(), 10);
@@ -136,12 +143,27 @@ export class StoricoallenamentiComponent implements OnInit {
         // Applica i filtri
         this.applyFilter();
 
+
+        for (let i = 0; i < this.filteredAssegnazioni.length; i++) {
+          const dataAssegnazione = new Date(this.filteredAssegnazioni[i].dataAssegnazione);
+          const allenamentoDay = dataAssegnazione.getDate(); // Ottieni il giorno dell'allenamento
+          const allenamentoMonth = dataAssegnazione.getMonth() + 1; // Ottieni il mese dell'allenamento
+          const allenamentoYear = dataAssegnazione.getFullYear(); // Ottieni l'anno dell'allenamento
+
+          // Verifica la coincidenza delle date
+          this.filteredAssegnazioni[i].allenamentoInDataOdierna = allenamentoMonth === currentMonth && allenamentoYear === currentYear && allenamentoDay == currentDay;
+          console.log(this.filteredAssegnazioni[i].allenamentoInDataOdierna)
+        }
+
+
       },
       (error:any) => {
         console.error("Errore durante l'ottenimento delle assegnazioni per l'atleta.", error);
       }
     );
   }
+
+
 
   getAllenamentidaAssegnare() {
     return this.allenamentoService.getAllAllenamenti(this.jwt).subscribe(
@@ -194,6 +216,65 @@ export class StoricoallenamentiComponent implements OnInit {
         this.errorReg = true;
       }
     );
+  }
+
+  getRealTimeHrv() {
+    if(this.allenamento.intensita == 'Alta')
+      this.integer = 1;
+    else this.integer = 0;
+
+    return this.realTimeHRVService.getRealTimeHRV(this.integer).subscribe(
+      (result: RealTimeHRV) => {
+        this.realTimeHRV = result;
+        this.realTimeHRV.median_nni = Number(this.realTimeHRV.median_nni.toFixed(2))
+        if(this.realTimeHRV.intensity == 1)
+          this.intensita = 'Alta';
+        else this.intensita = 'Medio/Bassa';
+
+        console.log(this.realTimeHRV);
+      },
+      (error: any) => {
+        console.error("Errore durante l'ottenimento dei dati in tempo reale.", error);
+      }
+    );
+
+  }
+
+
+  openModalHRV(assegnazione: AssegnazioneAllenamento) {
+    this.assegnazione = assegnazione;
+
+    this.getAllenamento();
+    this.startRealTimeHrv();
+
+    const modal = document.getElementById('modalAllenamentoHRV');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  // Funzione per chiudere il modal
+  closeModalHRV() {
+    this.stopRealTimeHrv()
+    const modal = document.getElementById('modalAllenamentoHRV');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  startRealTimeHrv() {
+
+    this.getRealTimeHrv();
+    // Avvia l'intervallo per chiamare getRealTimeHrv() ogni 5 secondi
+    this.intervalId = setInterval(() => {
+      this.getRealTimeHrv();
+    }, 5000);
+
+  }
+
+  stopRealTimeHrv() {
+    // Interrompe l'intervallo
+    clearInterval(this.intervalId);
   }
 
   openModalAssegnazione() {

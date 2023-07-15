@@ -28,6 +28,9 @@
         <td>
           <button class="btn btn-primary" (click)="openModal(assegnazione)">Dettagli</button>
         </td>
+        <td>
+          <button class="btn btn-primary" *ngIf="assegnazione.allenamentoInDataOdierna" (click)="openModalHRV(assegnazione)">Visualizza informazioni in tempo reale</button>
+        </td>
       </tr>
     </table>
   </div>
@@ -63,7 +66,6 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <h5 class="modal-title mx-3 mt-2">Intensità allenamento consigliata: {{ intensita }}</h5>
         <div class="modal-body">
           <div class="filter-container increased-font mt-1">
             <label for="typeFilter" class="mx-1">Filtra per tipologia:</label>
@@ -163,6 +165,25 @@
     padding-top: 10px; padding-bottom: 10px;">Allenamento assegnato con successo a {{ atleta.nome }} {{ atleta.cognome }}.</div>
             <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
       padding-top: 10px; padding-bottom: 10px;">Errore durante la creazione dell'assegnazione.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalAllenamentoHRV" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content d-flex" *ngIf="mostraListaAllenamenti">
+        <div class="modal-header">
+          <h5 class="modal-title">Risulati allenamento in tempo reale</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalHRV()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Median NNI:</strong> {{ realTimeHRV.median_nni }}</p>
+          <p><strong>Intensità:</strong> {{ intensita }}</p>
+          <div class="centered-button mt-3">
+            <button class="btn btn-secondary" (click)="closeModalHRV()">Chiudi</button>
           </div>
         </div>
       </div>

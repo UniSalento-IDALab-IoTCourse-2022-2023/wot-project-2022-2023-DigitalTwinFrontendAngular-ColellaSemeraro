@@ -7,4 +7,5 @@ export interface AssegnazioneAllenamento {
   dataAssegnazione: Date;
   idRisultatoPrecedente: string;
   durataCircuiti: number;
+  allenamentoInDataOdierna: boolean;
 }
