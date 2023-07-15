@@ -1,7 +1,9 @@
 <div class="container increased-font mt-3 centered-button">
-  <h3>Storico Allenamenti per {{atleta.nome}} {{atleta.cognome}}</h3>
+  <h3 *ngIf="filteredAssegnazioni.length>0">Storico Allenamenti per {{atleta.nome}} {{atleta.cognome}}</h3>
+  <h3 *ngIf="filteredAssegnazioni.length==0">Non hai ancora assegnato allenamenti a {{ atleta.nome }} {{ atleta.cognome }}. Assegnagliene uno.</h3>
+  <button class="btn btn-primary mt-2 mx-3" *ngIf="filteredAssegnazioni.length==0" (click)="openModalAssegnazione()">Assegna primo allenamento</button>
   <button class="btn btn-secondary mt-2" routerLink="/gestione-atleti-coach">Indietro</button>
-  <div class="filter-container increased-font text-center mt-4">
+  <div class="filter-container increased-font text-center mt-4" *ngIf="filteredAssegnazioni.length>0">
     <label for="dayFilter">Filtra per giorno:</label>
     <input type="number" id="dayFilter" [(ngModel)]="dayFilter" placeholder="Giorno" min="1" max="31" inputmode="numeric" [disabled]="!yearFilter || !monthFilter" (input)="filterNumericInput($event)">
     <label for="monthFilter">Filtra per mese:</label>
@@ -10,7 +12,7 @@
     <input type="number" id="yearFilter" [(ngModel)]="yearFilter" placeholder="Anno" min="2000" max="2100" inputmode="numeric" (input)="filterNumericInput($event); resetFilters()">
     <button class="btn btn-primary mx-4" (click)="applyFilter()">Applica</button>
   </div>
-  <div class="table-container mt-4">
+  <div class="table-container mt-4" *ngIf="filteredAssegnazioni.length>0">
     <table class="table">
       <tr>
         <th>Durata in minuti</th>
@@ -48,6 +50,120 @@
           <p *ngIf="assegnazione.numeroCircuiti != 0"><strong>Durata Totale:</strong> {{ assegnazione.durataInMinuti }} min</p>
           <p *ngIf="assegnazione.numeroCircuiti == 0"><strong>Durata:</strong> {{ assegnazione.durataInMinuti }} min</p>
           <button class="btn btn-primary mt-3" (click)="closeModal()">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modalNuovaAssegnazione" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content d-flex" *ngIf="mostraListaAllenamenti">
+        <div class="modal-header">
+          <h5 class="modal-title">Seleziona l'allenamento da assegnare per {{ atleta.nome }} {{ atleta.cognome }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <h5 class="modal-title mx-3 mt-2">Intensità allenamento consigliata: {{ intensita }}</h5>
+        <div class="modal-body">
+          <div class="filter-container increased-font mt-1">
+            <label for="typeFilter" class="mx-1">Filtra per tipologia:</label>
+            <select id="typeFilter" class="mx-1" [(ngModel)]="selectedTipo">
+              <option value="">Tutti</option>
+              <option [value]="coach.ruoloAllenato">{{ coach.ruoloAllenato }}</option>
+            </select>
+            <br>
+            <label for="intensityFilter" class="mx-1 mt-2">Filtra per intensità: </label>
+            <select id="intensityFilter" class="mx-2 mt-2" [(ngModel)]="selectedIntensita">
+              <option value="">Tutti</option>
+              <option *ngFor="let intensita of intensitas" [value]="intensita">{{ intensita }}</option>
+            </select>
+            <br>
+            <label for="teamFilter" class="mx-1 mt-2">Filtra per nome: </label>
+            <input type="text" id="teamFilter" class="mx-2 mt-2" placeholder="Tutti" [(ngModel)]="selectedNome">
+            <br>
+            <button class="btn btn-primary mt-2" (click)="applyFilters()">Applica</button>
+          </div>
+          <div class="table-container mt-4">
+            <table class="table" >
+              <tr>
+                <th>Nome</th>
+                <th>Tipologia</th>
+                <th>Intensità</th>
+              </tr>
+              <tr *ngFor="let allenamento of filteredAllenamenti" (click)="selectAllenamento(allenamento)" [class.selected]="selectedAllenamento === allenamento">
+                <td>{{ allenamento.nome }}</td>
+                <td *ngIf="allenamento.tipologia !== ''">{{ allenamento.tipologia }}</td>
+                <td *ngIf="allenamento.tipologia == ''">Generale</td>
+                <td>{{ allenamento.intensita }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="centered-button">
+            <button class="btn btn-primary" (click)="avantiClick()" [disabled]="!allenamentoSelezionato">Avanti</button>
+            <button class="btn btn-secondary mx-3" (click)="closeModal()">Indietro</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-content d-flex" *ngIf="mostraCampiAssegnazione">
+        <div class="modal-header">
+          <h5 class="modal-title">Imposta le specifiche di assegnamento per "{{ selectedAllenamento?.nome }}"</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalAssegnazione()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="submitForm()" #assegnazioneForm="ngForm">
+            <div class="form-group">
+              <label for="numeroCircuiti">Numero Circuiti</label>
+              <input type="number" class="form-control" id="numeroCircuiti" name="numeroCircuiti" [(ngModel)]="nuovaAssegnazione.numeroCircuiti" required
+                     pattern="^(1[0-5]|[0-9])$"
+                     #inputAssegnazioneCircuiti = "ngModel"
+                     [ngClass]="{'is-invalid': inputAssegnazioneCircuiti.errors && inputAssegnazioneCircuiti.invalid && inputAssegnazioneCircuiti.touched && inputAssegnazioneCircuiti.value !== ''}">
+              <div class="invalid-feedback">
+                Inserisci un numero valido per i circuiti (min 0, max 15).
+              </div>
+            </div>
+            <div class="form-group" *ngIf="nuovaAssegnazione.numeroCircuiti > 0">
+              <label for="durataCircuiti">Durata Circuiti in Minuti</label>
+              <input type="number" class="form-control" id="durataCircuiti" name="durataCircuiti" [(ngModel)]="nuovaAssegnazione.durataCircuiti" required
+                     pattern="^(30|[1-2][0-9]|[1-9])$"
+                     #inputAssegnazioneDurataCircuiti="ngModel"
+                     [ngClass]="{'is-invalid': inputAssegnazioneDurataCircuiti.errors && inputAssegnazioneDurataCircuiti.invalid && inputAssegnazioneDurataCircuiti.touched && inputAssegnazioneDurataCircuiti.value !== ''}"
+                     (ngModelChange)="calculateDurataTotale()">
+              <div class="invalid-feedback">
+                Inserisci un numero valido per la durata dei circuiti (min 1, max 30).
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="durataInMinuti">Durata in Minuti</label>
+              <input type="number" class="form-control" id="durataInMinuti" name="durataInMinuti" [disabled]="nuovaAssegnazione.numeroCircuiti > 0" [(ngModel)]="nuovaAssegnazione.durataInMinuti" required
+                     pattern="^(2[0-3][0-9]|1[0-9]{2}|[1-9][0-9]?)$"
+                     #inputAssegnazioneDurata="ngModel"
+                     [ngClass]="{'is-invalid': inputAssegnazioneDurata.errors && inputAssegnazioneDurata.invalid && inputAssegnazioneDurata.touched}">
+              <div class="invalid-feedback" *ngIf="!(nuovaAssegnazione.numeroCircuiti > 0)">
+                Inserisci un numero valido per la durata (min 10, max 240).
+              </div>
+              <div class="invalid-feedback" *ngIf="nuovaAssegnazione.numeroCircuiti > 0">
+                Cambia il numero e/o la durata dei circuiti per rientrare nel range consentito (min 10, max 240).
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="dataAssegnazione">Data Assegnazione</label>
+              <input type="date" class="form-control" id="dataAssegnazione" name="dataAssegnazione"
+                     [(ngModel)]="nuovaAssegnazione.dataAssegnazione" required
+                     [min]="getCurrentDate()">
+            </div>
+            <div class="centered-button mt-3">
+              <button type="submit" class="btn btn-primary" [disabled]="!assegnazioneForm.valid && allenamentoSelezionato">Salva</button>
+              <button class="btn btn-secondary mx-3" (click)="goBack()">Indietro</button>
+            </div>
+          </form>
+          <div class="d-flex justify-content-center">
+            <div *ngIf="successReg" class="alert alert-success" style="margin-top: 10px; margin-bottom: 10px;
+    padding-top: 10px; padding-bottom: 10px;">Allenamento assegnato con successo a {{ atleta.nome }} {{ atleta.cognome }}.</div>
+            <div *ngIf="errorReg" class="alert alert-danger" style="margin-top: 10px; margin-bottom: 10px;
+      padding-top: 10px; padding-bottom: 10px;">Errore durante la creazione dell'assegnazione.</div>
+          </div>
         </div>
       </div>
     </div>

@@ -35,6 +35,7 @@ export class GestioneallenamentiComponent implements OnInit{
   nuovaAssegnazione: AssegnazioneAllenamento = {} as AssegnazioneAllenamento;
   successReg: boolean = false;
   errorReg: boolean = false;
+  allenamentoSelezionato: boolean = false;
 
   selectedAllenamento: Allenamento | null = null;
 
@@ -259,6 +260,7 @@ export class GestioneallenamentiComponent implements OnInit{
 
   selectAllenamento(allenamento: Allenamento) {
     this.selectedAllenamento = allenamento;
+    this.allenamentoSelezionato = true;
   }
 
   goBack() {

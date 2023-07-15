@@ -6,6 +6,8 @@ import {AssegnazioneAllenamento} from "../../models/AssegnazioneAllenamento";
 import {orderBy} from "lodash";
 import {Allenamento} from "../../models/Allenamento";
 import {AllenamentoService} from "../../services/allenamento.service";
+import {HRV} from "../../models/HRV";
+import {AtletaService} from "../../services/atleta.service";
 
 @Component({
   selector: 'app-storicoallenamenti',
@@ -20,6 +22,23 @@ export class StoricoallenamentiComponent implements OnInit {
   assegnazioni: AssegnazioneAllenamento[] = [];
   assegnazione: AssegnazioneAllenamento = {} as AssegnazioneAllenamento;
   allenamento: Allenamento = {} as Allenamento;
+  mostraListaAllenamenti: boolean = true;
+  mostraCampiAssegnazione: boolean = false;
+  allenamentoSelezionato: boolean = false;
+  nuovaAssegnazione: AssegnazioneAllenamento = {} as AssegnazioneAllenamento;
+  successReg: boolean = false;
+  errorReg: boolean = false;
+  selectedTipo: string = '';
+  selectedNome: string = '';
+  selectedIntensita: string = '';
+  allenamenti: Allenamento[] = [];
+  filteredAllenamenti: Allenamento[] = [];
+  hrv: HRV = {} as HRV;
+  types: string[] = [this.coach.ruoloAllenato];
+  intensitas: string[] = ['Medio/Bassa', 'Alta'];
+  intensita: string = '';
+
+  selectedAllenamento: Allenamento | null = null;
 
   dayFilter: number | undefined;
   monthFilter: number | undefined;
@@ -27,7 +46,7 @@ export class StoricoallenamentiComponent implements OnInit {
 
   filteredAssegnazioni: AssegnazioneAllenamento[] = []; // Array dei conferimenti filtrati
 
-  constructor(private assegnazioneService: AssegnazioneService, private allenamentoService: AllenamentoService) {
+  constructor(private assegnazioneService: AssegnazioneService, private allenamentoService: AllenamentoService, private atletaService: AtletaService) {
   }
 
   applyFilter(): void {
@@ -124,6 +143,21 @@ export class StoricoallenamentiComponent implements OnInit {
     );
   }
 
+  getAllenamentidaAssegnare() {
+    return this.allenamentoService.getAllAllenamenti(this.jwt).subscribe(
+      (allenamenti: Allenamento[]) => {
+        console.log(allenamenti);
+        this.allenamenti = allenamenti;
+
+        this.selectedIntensita = this.intensita
+        this.applyFilters();
+      },
+      (error:any) => {
+        console.error("Errore nella richiesta di ottenimento degli allenamenti.", error);
+      }
+    );
+  }
+
   getAllenamento() {
     return this.allenamentoService.getAllenamentoById(this.jwt, this.assegnazione.idAllenamento).subscribe(
       (allenamento: Allenamento) => {
@@ -135,6 +169,109 @@ export class StoricoallenamentiComponent implements OnInit {
       }
     );
   }
+
+
+  creaAssegnazione() {
+    this.nuovaAssegnazione.idAllenamento = <string>this.selectedAllenamento?.id;
+    this.nuovaAssegnazione.idRisultatoPrecedente = '';
+    if (this.atleta.id != null) {
+      this.nuovaAssegnazione.idAtleta = this.atleta.id;
+    }
+
+    return this.assegnazioneService.creaNuovaAssegnazione(this.jwt, this.nuovaAssegnazione, this.coach.id).subscribe(
+      (assegnazione: AssegnazioneAllenamento) => {
+        console.log(assegnazione);
+        this.successReg = true;
+        this.errorReg = false;
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
+      },
+      (error: any) => {
+        console.error("Errore durante la creazione dell'assegnazione.", error);
+        this.errorReg = true;
+      }
+    );
+  }
+
+  openModalAssegnazione() {
+
+    this.getAllenamentidaAssegnare();
+
+    const modal = document.getElementById('modalNuovaAssegnazione');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  closeModalAssegnazione() {
+
+    const modal = document.getElementById('modalNuovaAssegnazione');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+
+  }
+
+  calculateDurataTotale() {
+    if (this.nuovaAssegnazione.numeroCircuiti > 0 && this.nuovaAssegnazione.durataCircuiti > 0) {
+      this.nuovaAssegnazione.durataInMinuti = this.nuovaAssegnazione.numeroCircuiti * this.nuovaAssegnazione.durataCircuiti;
+    }
+  }
+
+  applyFilters() {
+    // Applica i filtri alla lista degli allenamenti
+    this.filteredAllenamenti = this.allenamenti.filter((allenamento) => {
+      // Verifica se l'allenamento soddisfa i criteri di filtro
+      const matchesTipo = (this.selectedTipo === '' && allenamento.tipologia === this.coach.ruoloAllenato) || allenamento.tipologia === this.selectedTipo;
+      const matchesNome = this.selectedNome === '' || allenamento.nome === this.selectedNome || allenamento.nome.toLowerCase().includes(this.selectedNome.toLowerCase());
+
+      let matchesIntensita: boolean;
+
+      if (this.selectedIntensita === 'Medio/Bassa') {
+        matchesIntensita = allenamento.intensita === 'Media' || allenamento.intensita === 'Bassa';
+      } else if(this.selectedIntensita === '') {
+        matchesIntensita = allenamento.intensita === 'Media' || allenamento.intensita === 'Bassa' || allenamento.intensita === 'Alta';
+      } else {
+        matchesIntensita = allenamento.intensita === this.selectedIntensita;
+      }
+
+      return matchesTipo && matchesNome && matchesIntensita;
+    });
+  }
+
+  selectAllenamento(allenamento: Allenamento) {
+    this.selectedAllenamento = allenamento;
+    this.allenamentoSelezionato = true;
+  }
+
+  goBack() {
+    this.mostraListaAllenamenti = true;
+    this.mostraCampiAssegnazione = false;
+    this.nuovaAssegnazione = {} as AssegnazioneAllenamento;
+  }
+
+  avantiClick() {
+    this.mostraListaAllenamenti = false;
+    this.mostraCampiAssegnazione = true;
+  }
+
+  submitForm() {
+    if(this.nuovaAssegnazione.numeroCircuiti == 0)
+      this.nuovaAssegnazione.durataCircuiti = 0;
+    this.creaAssegnazione();
+  }
+
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+    const day = ("0" + currentDate.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
 
   ngOnInit(): void {
 

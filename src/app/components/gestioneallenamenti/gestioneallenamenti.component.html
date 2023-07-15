@@ -12,7 +12,7 @@
     <label for="yearFilter">Filtra per anno:</label>
     <input type="number" id="yearFilter" [(ngModel)]="yearFilter" placeholder="Anno" min="2000" max="2100" inputmode="numeric" (input)="filterNumericInput($event); resetFilters()">
     <button class="btn btn-primary mx-4" (click)="applyFilter()">Applica</button>
-    <div class="table-container mt-4">
+  </div>
   <div class="table-container mt-4">
     <table class="table" >
       <tr>
@@ -77,7 +77,7 @@
             </table>
           </div>
           <div class="centered-button">
-            <button class="btn btn-primary" (click)="avantiClick()">Avanti</button>
+            <button class="btn btn-primary" (click)="avantiClick()" [disabled]="!allenamentoSelezionato">Avanti</button>
             <button class="btn btn-secondary mx-3" (click)="closeModal()">Indietro</button>
           </div>
         </div>
@@ -132,7 +132,7 @@
                      [min]="getCurrentDate()">
             </div>
             <div class="centered-button mt-3">
-              <button type="submit" class="btn btn-primary" [disabled]="!assegnazioneForm.valid">Salva</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!assegnazioneForm.valid && allenamentoSelezionato">Salva</button>
               <button class="btn btn-secondary mx-3" (click)="goBack()">Indietro</button>
             </div>
           </form>
