@@ -43,7 +43,7 @@
         </div>
         <div class="modal-body">
           <p><strong>Allenamento:</strong> {{ allenamento.nome }}</p>
-          <p><strong>Tipologia:</strong> {{ allenamento.tipologia }}</p>
+          <p *ngIf="allenamento.tipologia != ''"><strong>Tipologia:</strong> {{ allenamento.tipologia }}</p>
           <p *ngIf="allenamento.tipologia == ''"><strong>Tipologia:</strong> Generale</p>
           <p><strong>Intensità:</strong> {{allenamento.intensita}}</p>
           <p *ngIf="assegnazione.numeroCircuiti != 0"><strong>Numero Circuiti:</strong> {{ assegnazione.numeroCircuiti }} min</p>

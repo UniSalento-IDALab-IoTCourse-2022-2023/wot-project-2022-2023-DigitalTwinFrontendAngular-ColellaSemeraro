@@ -33,8 +33,8 @@ export class UsersService {
       password: password
     };
 
-    //const loginUrl: string = "https://fotjz0nseb.execute-api.us-east-1.amazonaws.com/dev/api/users/authenticate";
-    const loginUrl:string = "http://localhost:8080/api/users/authenticate";
+    const loginUrl: string = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/authenticate";
+    //const loginUrl:string = "http://localhost:8080/api/users/authenticate";
 
     return this.http.post(loginUrl, loginDTO).pipe(
       map((response: any) => response.jwt),
@@ -119,8 +119,8 @@ export class UsersService {
     // Esempio:
     var jwt = JSON.parse(localStorage.getItem('currentUser')!).token;
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
-    //var urlRole = "https://fotjz0nseb.execute-api.us-east-1.amazonaws.com/dev/api/users/role/"+username
-    var urlRole = 'http://localhost:8080/api/users/role/' + username;
+    var urlRole = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/role/"+username
+    // var urlRole = 'http://localhost:8080/api/users/role/' + username;
     return this.http.get<RoleResponse>(urlRole, this.httpOptions).pipe(
       map((response) => response.role)
     );
@@ -129,8 +129,8 @@ export class UsersService {
   findByUsernameAtleta(username:string): Observable<Atleta> {
     var jwt = JSON.parse(localStorage.getItem('currentUser')!).token;
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
-    //var urlFindCliente = "https://fotjz0nseb.execute-api.us-east-1.amazonaws.com/dev/api/users/cliente/find/username/"+username;
-    var urlFindCliente = 'http://localhost:8080/api/users/atleta/find/username/' + username;
+    var urlFindCliente = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/find/username/"+username;
+    //var urlFindCliente = 'http://localhost:8080/api/users/atleta/find/username/' + username;
     return this.http.get<Atleta>(urlFindCliente, this.httpOptions).pipe(
       map((response: any) => response as Atleta)
     );
@@ -139,8 +139,8 @@ export class UsersService {
   findByUsernameCoach(username:string): Observable<Coach> {
     var jwt = JSON.parse(localStorage.getItem('currentUser')!).token;
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
-    //var urlFindAmmComune = "https://fotjz0nseb.execute-api.us-east-1.amazonaws.com/dev/api/users/ammcomune/find/username/"+username;
-    var urlFindAmmComune = 'http://localhost:8080/api/users/coach/find/username/' + username;
+    var urlFindAmmComune = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach/find/username/"+username;
+    //var urlFindAmmComune = 'http://localhost:8080/api/users/coach/find/username/' + username;
     return this.http.get<Coach>(urlFindAmmComune, this.httpOptions).pipe(
       map((response: any) => response as Coach)
     );
@@ -149,8 +149,8 @@ export class UsersService {
   findByUsernameAmministratore(username:string): Observable<Amministratore> {
     var jwt = JSON.parse(localStorage.getItem('currentUser')!).token;
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
-    //var urlFindAmmAzienda = "https://fotjz0nseb.execute-api.us-east-1.amazonaws.com/dev/api/users/ammazienda/find/username/"+username;
-    var urlFindAmmAzienda = 'http://localhost:8080/api/users/amministratore/find/username/' + username;
+    var urlFindAmmAzienda = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/amministratore/find/username/"+username;
+    //var urlFindAmmAzienda = 'http://localhost:8080/api/users/amministratore/find/username/' + username;
     return this.http.get<Amministratore>(urlFindAmmAzienda, this.httpOptions).pipe(
       map((response: any) => response as Amministratore)
     );
@@ -158,7 +158,9 @@ export class UsersService {
 
   updateEmailUser(jwt: string, username: string, email: string): Observable<any> {
 
-    const url = "http://localhost:8080/api/users/update/email";
+    //const url = "http://localhost:8080/api/users/update/email";
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/update/email";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -176,7 +178,9 @@ export class UsersService {
 
   updatePasswordUser(jwt: string, username: string, old_password: string, new_password: string): Observable<any> {
 
-    const url = "http://localhost:8080/api/users/update/password/"+username;
+    //const url = "http://localhost:8080/api/users/update/password/"+username;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/update/password/"+username;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 

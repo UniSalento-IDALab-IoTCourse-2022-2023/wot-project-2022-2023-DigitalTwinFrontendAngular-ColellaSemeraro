@@ -22,7 +22,9 @@ export class AssegnazioneService {
 
   checkifExistsByIdRisultatoPrecedente(jwt: string, idRisultatoPrecedente: string): Observable<boolean> {
 
-    const url = "http://localhost:8081/api/assegnazioni/existsByIdRisultatoPrecedente/"+idRisultatoPrecedente;
+    //const url = "http://localhost:8081/api/assegnazioni/existsByIdRisultatoPrecedente/"+idRisultatoPrecedente;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/assegnazioni/existsByIdRisultatoPrecedente/"+idRisultatoPrecedente;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -32,7 +34,9 @@ export class AssegnazioneService {
 
   creaNuovaAssegnazione(jwt: string, assegnazioneDTO: AssegnazioneAllenamento, idCoach: string | undefined): Observable<AssegnazioneAllenamento> {
 
-    const url = "http://localhost:8081/api/assegnazioni/"+idCoach+"/";
+    //const url = "http://localhost:8081/api/assegnazioni/"+idCoach+"/";
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/assegnazioni/"+idCoach;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -42,7 +46,9 @@ export class AssegnazioneService {
 
   findAllByIdAtleta(jwt: string, idAtleta: string | undefined): Observable<AssegnazioneAllenamento[]> {
 
-    const url = "http://localhost:8081/api/assegnazioni/findAllByAtletaId/"+idAtleta;
+    //const url = "http://localhost:8081/api/assegnazioni/findAllByAtletaId/"+idAtleta;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/assegnazioni/findAllByAtletaId/"+idAtleta;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -52,7 +58,9 @@ export class AssegnazioneService {
 
   findMostRecentByIdAtleta(jwt: string, idAtleta: string | undefined): Observable<AssegnazioneAllenamento> {
 
-    const url = "http://localhost:8081/api/assegnazioni/findMostRecentByIdAtleta/"+idAtleta+"/";
+    //const url = "http://localhost:8081/api/assegnazioni/findMostRecentByIdAtleta/"+idAtleta+"/";
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/assegnazioni/findMostRecentByIdAtleta/"+idAtleta;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 

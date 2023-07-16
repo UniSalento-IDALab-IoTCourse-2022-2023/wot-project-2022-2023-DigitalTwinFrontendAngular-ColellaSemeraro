@@ -22,7 +22,9 @@ export class AtletaService {
 
   getAllAtleti(jwt: string): Observable<Atleta[]> {
 
-    const url = "http://localhost:8080/api/users/atleta/findAll"
+    //const url = "http://localhost:8080/api/users/atleta/findAll"
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/findAll";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -32,7 +34,9 @@ export class AtletaService {
 
   getAtletaById(jwt: string, idAtleta: string | undefined): Observable<Atleta> {
 
-    const url = "http://localhost:8080/api/users/atleta/findById/"+idAtleta;
+    //const url = "http://localhost:8080/api/users/atleta/findById/"+idAtleta;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/findById/"+idAtleta;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -42,7 +46,9 @@ export class AtletaService {
 
   checkifAtletaAllenatoDaCoach(jwt: string, idCoach: string | undefined): Observable<boolean> {
 
-    const url = "http://localhost:8080/api/users/atleta/existsByCoachId/"+idCoach;
+    //const url = "http://localhost:8080/api/users/atleta/existsByCoachId/"+idCoach;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/existsByCoachId/"+idCoach;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -52,7 +58,9 @@ export class AtletaService {
 
   updateSquadraCoachAtleta(jwt: string, username: string, squadra: string, idCoach: string | undefined): Observable<any> {
 
-    const url = "http://localhost:8080/api/users/atleta/updateRuoloSquadraCoach/"+username;
+    //const url = "http://localhost:8080/api/users/atleta/updateRuoloSquadraCoach/"+username;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/updateRuoloSquadraCoach/"+username;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -71,7 +79,9 @@ export class AtletaService {
 
   creaAtleta(jwt: string, atletaDTO: Atleta): Observable<Atleta> {
 
-    const url = "http://localhost:8080/api/users/atleta/"
+    // const url = "http://localhost:8080/api/users/atleta/"
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -81,7 +91,9 @@ export class AtletaService {
 
   getAtletyByCoach(jwt: string, idCoach: string | undefined): Observable<Atleta[]> {
 
-    const url = "http://localhost:8080/api/users/atleta/findByCoachId/"+idCoach;
+    //const url = "http://localhost:8080/api/users/atleta/findByCoachId/"+idCoach;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/findByCoachId/"+idCoach;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -91,7 +103,9 @@ export class AtletaService {
 
   updatePesoAltezza(jwt: string, idCoach: string | undefined, usernameAtleta: string, idCoachAtleta: string, altezza: number, peso: number): Observable<any> {
 
-    const url = "http://localhost:8080/api/users/atleta/updateAltezzaEPeso/"+idCoach;
+    // const url = "http://localhost:8080/api/users/atleta/updateAltezzaEPeso/"+idCoach;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/updateAltezzaEPeso/"+idCoach;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -112,7 +126,8 @@ export class AtletaService {
 
   getAtletaByUsername(jwt: string, username: string): Observable<Atleta> {
 
-    const url = "http://localhost:8080/api/users/atleta/find/username/"+username;
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/atleta/find/username/"+username;
+    //const url = "http://localhost:8080/api/users/atleta/find/username/"+username;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 

@@ -22,7 +22,9 @@ export class CoachService {
 
   getAllCoaches(jwt: string): Observable<Coach[]> {
 
-    const url = "http://localhost:8080/api/users/coach/findAll"
+    //const url = "http://localhost:8080/api/users/coach/findAll"
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach/findAll";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -42,7 +44,9 @@ export class CoachService {
 
   creaCoach(jwt: string, coachDTO: Coach):Observable<Coach> {
 
-    const url = "http://localhost:8080/api/users/coach/"
+    //const url = "http://localhost:8080/api/users/coach/"
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -52,7 +56,9 @@ export class CoachService {
 
   checkifCoachExistsBySquadraAndRuolo(jwt: string, squadra: string, ruoloAllenato: string): Observable<boolean> {
 
-    const url = "http://localhost:8080/api/users/coach/checkifExistsBySquadraAndRuolo";
+    //const url = "http://localhost:8080/api/users/coach/checkifExistsBySquadraAndRuolo";
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach/checkifExistsBySquadraAndRuolo";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -67,7 +73,9 @@ export class CoachService {
 
   updateRuoloSquadraCoach(jwt: string, squadra: string, ruoloAllenato: string, username: string): Observable<any> {
 
-    const url = "http://localhost:8080/api/users/coach/updateRuoloSquadraCoach/"+username;
+    //const url = "http://localhost:8080/api/users/coach/updateRuoloSquadraCoach/"+username;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach/updateRuoloSquadraCoach/"+username;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 

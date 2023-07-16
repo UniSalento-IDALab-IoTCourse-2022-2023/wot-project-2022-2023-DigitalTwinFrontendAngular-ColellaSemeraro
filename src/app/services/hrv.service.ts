@@ -22,7 +22,9 @@ export class HrvService {
 
   getHRVByAtleti(jwt: string, usernameAtleti: string[]): Observable<HRV[]> {
 
-    const url = "http://localhost:8082/api/hrv/findAllByAtleti"
+    //const url = "http://localhost:8082/api/hrv/findAllByAtleti"
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/hrv/findAllByAtleti"
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
