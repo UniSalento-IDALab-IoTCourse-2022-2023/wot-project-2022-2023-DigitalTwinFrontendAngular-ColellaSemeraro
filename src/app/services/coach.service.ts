@@ -34,7 +34,9 @@ export class CoachService {
 
   getCoachById(jwt: string, idCoach: string | undefined): Observable<Coach> {
 
-    const url = "http://localhost:8080/api/users/coach/findById/"+idCoach;
+    //const url = "http://localhost:8080/api/users/coach/findById/"+idCoach;
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach/findById/"+idCoach;
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 
@@ -93,7 +95,10 @@ export class CoachService {
   }
 
   getCoachBySquadraERuolo(jwt: string, squadra: string, ruolo: string):Observable<Coach> {
-    const url = "http://localhost:8080/api/users/coach/findByTeamAndRole";
+
+    //const url = "http://localhost:8080/api/users/coach/findByTeamAndRole";
+
+    const url = "https://x7oeqezkzi.execute-api.us-east-1.amazonaws.com/dev/api/users/coach/findByTeamAndRole";
 
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+jwt);
 

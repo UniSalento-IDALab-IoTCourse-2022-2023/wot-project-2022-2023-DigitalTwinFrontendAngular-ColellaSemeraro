@@ -49,7 +49,7 @@
               <label for="nomeUpdate">Nome:</label>
               <input type="text" class="form-control" id="nomeUpdate" name="nomeUpdate" [(ngModel)]="nomeAllenamento"
                      required
-                     pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                     pattern="^(?=.*[A-Za-zÀ-ÖØ-öø-ÿ])[A-Za-zÀ-ÖØ-öø-ÿ0-9 ]+$"
                      #inputNomeUpdate = "ngModel"
                      [ngClass]="{'is-invalid': inputNomeUpdate.errors && inputNomeUpdate.invalid && inputNomeUpdate.touched && inputNomeUpdate.value !== ''}">
               <div class="invalid-feedback">
@@ -85,11 +85,11 @@
                   <label for="nome">Nome:</label>
                   <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="newAllenamento.nome"
                          required
-                         pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$"
+                         pattern="^(?=.*[A-Za-zÀ-ÖØ-öø-ÿ])[A-Za-zÀ-ÖØ-öø-ÿ0-9 ]+$"
                          #inputNomeAllenamento = "ngModel"
                          [ngClass]="{'is-invalid': inputNomeAllenamento.errors && inputNomeAllenamento.invalid && inputNomeAllenamento.touched && inputNomeAllenamento.value !== ''}">
                   <div class="invalid-feedback">
-                    Il nome deve contenere solo lettere.
+                    Il nome non può contenere soltanto numeri.
                   </div>
                 </div>
                 <div class="form-group">
