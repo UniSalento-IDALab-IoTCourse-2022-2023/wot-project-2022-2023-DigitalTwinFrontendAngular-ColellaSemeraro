@@ -1,60 +1,60 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand mx-1" [href]="linkHrefHome">IoT Digital Twin</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <div class="navbar-nav ml-auto mx-2">
-      <ul class="navbar-nav">
-        <li class="nav-item" *ngIf="enableHome">
-          <a class="nav-link" [href]="linkHrefHome">Home</a>
-        </li>
-        <li class="nav-item" *ngIf="ifAmministratore">
-          <a class="nav-link" href="/gestione-atleti" style="white-space: nowrap;">Gestione Atleti</a>
-        </li>
-        <li class="nav-item" *ngIf="ifAmministratore">
-          <a class="nav-link" href="/gestione-coach" style="white-space: nowrap;">Gestione Coach</a>
-        </li>
-        <li class="nav-item" *ngIf="ifAmministratore">
-          <a class="nav-link" href="/allenamenti-amministratore" style="white-space: nowrap;">Gestione Allenamenti</a>
-        </li>
-        <li class="nav-item" *ngIf="ifCoach">
-          <a class="nav-link" href="/gestione-atleti-coach" style="white-space: nowrap">Gestione Atleti</a>
-        </li>
-        <li class="nav-item" *ngIf="ifCoach">
-          <a class="nav-link" href="/gestione-allenamenti" style="white-space: nowrap">Allenamenti</a>
-        </li>
-        <li class="nav-item" *ngIf="ifCoach">
-          <a class="nav-link" href="/gestione-profilo-coach" style="white-space: nowrap">Gestione Profilo</a>
-        </li>
-        <li class="nav-item" *ngIf="ifAtleta">
-          <a class="nav-link" href="/gestione-allenamenti-atleta" style="white-space: nowrap">Allenamenti</a>
-        </li>
-        <li class="nav-item" *ngIf="ifAtleta">
-          <a class="nav-link" href="/gestione-profilo-atleta" style="white-space: nowrap">Gestione Profilo</a>
-        </li>
-      </ul>
-      <div class="navbar-logout-1" *ngIf="enableHome && ifAmministratore">
-        <button class="btn btn-primary" (click)="logout()">Logout</button>
-      </div>
-      <div class="navbar-logout-2" *ngIf="enableHome && ifCoach">
-        <button class="btn btn-primary" (click)="logout()">Logout</button>
-      </div>
-      <div class="navbar-logout-3" *ngIf="enableHome && ifAtleta">
-        <button class="btn btn-primary" (click)="logout()">Logout</button>
+<div class="page-wrapper">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand mx-1" [href]="linkHrefHome">IoT Digital Twin</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="navbar-nav ml-auto mx-2">
+        <ul class="navbar-nav">
+          <li class="nav-item" *ngIf="enableHome">
+            <a class="nav-link" [href]="linkHrefHome">Home</a>
+          </li>
+          <li class="nav-item" *ngIf="ifAmministratore">
+            <a class="nav-link" href="/gestione-atleti" style="white-space: nowrap;">Gestione Atleti</a>
+          </li>
+          <li class="nav-item" *ngIf="ifAmministratore">
+            <a class="nav-link" href="/gestione-coach" style="white-space: nowrap;">Gestione Coach</a>
+          </li>
+          <li class="nav-item" *ngIf="ifAmministratore">
+            <a class="nav-link" href="/allenamenti-amministratore" style="white-space: nowrap;">Gestione Allenamenti</a>
+          </li>
+          <li class="nav-item" *ngIf="ifCoach">
+            <a class="nav-link" href="/gestione-atleti-coach" style="white-space: nowrap">Gestione Atleti</a>
+          </li>
+          <li class="nav-item" *ngIf="ifCoach">
+            <a class="nav-link" href="/gestione-allenamenti" style="white-space: nowrap">Allenamenti</a>
+          </li>
+          <li class="nav-item" *ngIf="ifCoach">
+            <a class="nav-link" href="/gestione-profilo-coach" style="white-space: nowrap">Gestione Profilo</a>
+          </li>
+          <li class="nav-item" *ngIf="ifAtleta">
+            <a class="nav-link" href="/gestione-allenamenti-atleta" style="white-space: nowrap">Allenamenti</a>
+          </li>
+          <li class="nav-item" *ngIf="ifAtleta">
+            <a class="nav-link" href="/gestione-profilo-atleta" style="white-space: nowrap">Gestione Profilo</a>
+          </li>
+        </ul>
       </div>
     </div>
+    <div class="text-right">
+      <button class="btn btn-primary mx-2" *ngIf="enableHome" (click)="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="content">
+    <!-- Resto del codice del contenuto principale -->
+
+    <router-outlet></router-outlet>
   </div>
-</nav>
 
-<nav class="footer navbar-expand-lg navbar-dark bg-primary fixed-bottom">
-  <div class="navbar-nav mx-auto">
-    <a class="nav-link mx-1" href="/informazioni">Informazioni</a>
-    <a class="nav-link mx-1" href="/contatti">Contatti</a>
-    <a class="nav-link mx-1" [href]="linkHrefGuida">Guida</a>
-  </div>
-</nav>
+  <nav class="footer navbar-expand-lg navbar-dark bg-primary fixed-bottom custom-footer">
+    <div class="navbar-nav mx-auto d-flex align-items-center" style="justify-content: center">
+      <a class="nav-link mx-1" href="/informazioni">Informazioni</a>
+      <a class="nav-link mx-1" href="/contatti">Contatti</a>
+      <a class="nav-link mx-1" [href]="linkHrefGuida">Guida</a>
+    </div>
+  </nav>
 
-
-<router-outlet></router-outlet>
+</div>
