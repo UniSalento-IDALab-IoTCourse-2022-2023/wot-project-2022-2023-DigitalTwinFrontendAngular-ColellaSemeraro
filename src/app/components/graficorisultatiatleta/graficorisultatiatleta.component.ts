@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Atleta} from "../../models/Atleta";
 import {HRV} from "../../models/HRV";
 import {HrvService} from "../../services/hrv.service";
 import Chart, {ChartOptions} from "chart.js/auto";
 import {orderBy} from "lodash";
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 @Component({
   selector: 'app-graficorisultatiatleta',
@@ -11,6 +14,9 @@ import {orderBy} from "lodash";
   styleUrls: ['./graficorisultatiatleta.component.scss']
 })
 export class GraficorisultatiatletaComponent implements OnInit {
+
+  @ViewChild('chartCanvas', { static: true }) chartCanvas: ElementRef<HTMLCanvasElement>;
+
 
   public chart: any;
   atleta: Atleta = {} as Atleta;
@@ -22,6 +28,7 @@ export class GraficorisultatiatletaComponent implements OnInit {
   usernameAtleta: string[] = [];
 
   constructor(private hrvService: HrvService) {
+    this.chartCanvas = {} as ElementRef<HTMLCanvasElement>;
   }
 
   getHRVs() {
@@ -65,7 +72,7 @@ export class GraficorisultatiatletaComponent implements OnInit {
         ]
       },
       options: {
-        aspectRatio: 2.9,
+        aspectRatio: 3.25,
         plugins: {
           tooltip: {
             callbacks: {
@@ -84,6 +91,47 @@ export class GraficorisultatiatletaComponent implements OnInit {
           }
         }
       } as ChartOptions<'line'>
+    });
+  }
+
+  downloadHRV() {
+    this.hrvService.downloadCSV(this.jwt, this.listaHRV).subscribe((data: Blob) => {
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'hrv_list.csv';
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  downloadChart() {
+    const chartCanvas = this.chartCanvas.nativeElement;
+
+    // Crea un nuovo oggetto jsPDF
+    const pdf = new jsPDF();
+
+    // Utilizza html2canvas per generare un'immagine del canvas
+    html2canvas(chartCanvas).then((canvas) => {
+      const imageData = canvas.toDataURL('image/png');
+
+      // Imposta le dimensioni del canvas nel PDF
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+
+      const title = 'Risultati per '+ this.atleta.nome + " " + this.atleta.cognome;
+      pdf.setFontSize(18);
+      pdf.setFontStyle('bold');
+      pdf.text(title, pdfWidth / 2, 20, {align: 'center'});
+
+      // Aggiungi l'immagine al PDF
+      pdf.addImage(imageData, 'PNG', 0, 50, pdfWidth, pdfHeight);
+
+      // Salva il PDF
+      pdf.save('myChart.pdf');
+
+
     });
   }
 
