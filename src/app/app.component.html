@@ -53,7 +53,7 @@
     <div class="navbar-nav mx-auto d-flex align-items-center" style="justify-content: center">
       <a class="nav-link mx-1" href="/informazioni">Informazioni</a>
       <a class="nav-link mx-1" href="/contatti">Contatti</a>
-      <a class="nav-link mx-1" [href]="linkHrefGuida">Guida</a>
+      <a class="nav-link mx-1" [href]="linkHrefGuida" *ngIf="enableHome">Guida</a>
     </div>
   </nav>
 
