@@ -21,7 +21,6 @@ export class GraficorisultaticoachComponent implements OnInit{
 
 
   public chart: any;
-  public chartPDF: any;
   coach: Coach = {} as Coach;
   jwt: string = '';
   listaHRV: HRV[] = [];
