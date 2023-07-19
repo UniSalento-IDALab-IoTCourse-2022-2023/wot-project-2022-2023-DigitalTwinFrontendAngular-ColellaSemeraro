@@ -210,8 +210,6 @@ export class GraficorisultaticoachComponent implements OnInit{
         // Aggiungi l'immagine al PDF
         pdf.addImage(imageData, 'PNG', 0, 50, pdfWidth, pdfHeight);
 
-        this.chartPDF.destroy();
-
         // Salva il PDF
         pdf.save('chart' + this.filteredHRV[0].usernameAtleta + '.pdf');
       });
