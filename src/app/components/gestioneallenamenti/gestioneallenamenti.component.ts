@@ -139,7 +139,7 @@ export class GestioneallenamentiComponent implements OnInit{
           this.assegnazioneService.checkifExistsByIdRisultatoPrecedente(this.jwt, hrv.id).subscribe(
             (exists: boolean) => {
               // Assegna il valore booleano a existsByIdRisultatoPrecedente
-              hrv.existsByIdRisultatoPrecedente = exists;
+              hrv.existsByIdRisultatoPrecedente = !exists;
             },
             (error: any) => {
               console.error("Errore durante il controllo dell'esistenza del risultato precedente", error);

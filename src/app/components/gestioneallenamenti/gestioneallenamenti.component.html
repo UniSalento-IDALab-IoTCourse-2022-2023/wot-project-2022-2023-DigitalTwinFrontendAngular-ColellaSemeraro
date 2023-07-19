@@ -27,7 +27,7 @@
         <td>{{ hrv.data | date }}</td>
         <td>{{ hrv.valorePredetto === 1 ? 'Alta' : 'Medio/Bassa' }}</td>
         <td>
-          <button *ngIf="!hrv.existsByIdRisultatoPrecedente" class="btn btn-primary" (click)="openModal(hrv)">Nuovo Allenamento</button>
+          <button *ngIf="hrv.existsByIdRisultatoPrecedente" class="btn btn-primary" (click)="openModal(hrv)">Nuovo Allenamento</button>
         </td>
       </tr>
     </table>
